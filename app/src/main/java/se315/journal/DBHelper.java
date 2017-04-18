@@ -297,9 +297,12 @@ public class DBHelper extends SQLiteOpenHelper
                 new String[] {String.valueOf(id)});
 
         Subject subject = new Subject();
-        subject.setId(id);
-        subject.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
 
+        if(cursor.moveToFirst())
+        {
+            subject.setId(id);
+            subject.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+        }
         cursor.close();
         db.close();
         return subject;
@@ -312,9 +315,12 @@ public class DBHelper extends SQLiteOpenHelper
                 new String[] {name});
 
         Subject subject = new Subject();
-        subject.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-        subject.setName(name);
 
+        if(cursor.moveToFirst())
+        {
+            subject.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            subject.setName(name);
+        }
         cursor.close();
         db.close();
         return subject;
@@ -411,6 +417,7 @@ public class DBHelper extends SQLiteOpenHelper
             while(!cursor.isAfterLast())
             {
                 Item item = new Item();
+                item.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
                 item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
                 item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
@@ -749,5 +756,52 @@ public class DBHelper extends SQLiteOpenHelper
         cursor.close();
         db.close();
         return marks;
+    }
+
+    public void addMark(Mark mark)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_STUDENT_REGISTER, mark.getStudentRegister());
+        values.put(COLUMN_SUBJECT_ID, mark.getSubjectId());
+        values.put(COLUMN_ITEM_ID, mark.getItemId());
+        values.put(COLUMN_MARK, mark.getMark());
+
+        db.insert(MARK_TABLE, null, values);
+        db.close();
+    }
+
+    public void deleteMark(Mark mark)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(MARK_TABLE, COLUMN_STUDENT_REGISTER + " =? AND " + COLUMN_SUBJECT_ID + " =? AND " + COLUMN_ITEM_ID + " =?",
+                new String[] {mark.getStudentRegister(), String.valueOf(mark.getSubjectId()), String.valueOf(mark.getItemId())});
+
+        db.close();
+    }
+
+    // return true if mark exists in db
+    public boolean markExists(Mark mark)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MARK_TABLE + " WHERE " + COLUMN_STUDENT_REGISTER + " =? AND "
+                        + COLUMN_SUBJECT_ID + " =? AND "
+                        + COLUMN_ITEM_ID + " =?",
+                new String[] {mark.getStudentRegister(), String.valueOf(mark.getSubjectId()), String.valueOf(mark.getItemId())});
+
+        if(cursor.moveToFirst())
+        {
+            cursor.close();
+            db.close();
+            return true;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return false;
+        }
     }
 }

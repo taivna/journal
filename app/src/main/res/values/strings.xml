@@ -83,6 +83,8 @@
     <string name="mark_tv_mark">Оноо</string>
     <string name="mark_btn_back">Буцах</string>
     <string name="mark_btn_save">Хадгалах</string>
+    <string name="mark_dialog_title">Шалгалт/Даалгаварын оноог өөрчлөх</string>
+    <string name="mark_dialog_message">Шинэ оноо оруулна уу</string>
 
     <string name="sch_title">Хичээлийн хуваарь</string>
     <string name="sch_btn_back">Буцах</string>

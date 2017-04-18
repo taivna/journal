@@ -95,9 +95,9 @@ public class MarkListActivity extends AppCompatActivity
                 String fullName = studentNames.get(groupPos);
                 String surName = fullName.substring(0, fullName.indexOf("\t"));
                 String name = fullName.substring(fullName.indexOf("\t") + 1, fullName.length());
-                Toast.makeText(getApplicationContext(), groupPos + "," + childPos, Toast.LENGTH_SHORT).show();
                 String childText = markListHashMap.get(fullName).get(childPos);
                 String subjectName = childText.substring(0, childText.indexOf("\t"));
+
                 Student student = dbHelper.getStudent(name, surName);
                 Subject subject = dbHelper.getSubject(subjectName);
 
