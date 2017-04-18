@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     public void switchToMarks(View view)
     {
-        Intent intent = new Intent(this, MarkActivity.class);
+        Intent intent = new Intent(this, MarkListActivity.class);
         startActivity(intent);
     }
 }

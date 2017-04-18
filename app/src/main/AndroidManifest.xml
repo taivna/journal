@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -28,9 +28,10 @@
         <activity android:name=".StudentAddActivity" />
         <activity android:name=".GuardianAddActivity" />
         <activity android:name=".SubjectAddActivity" />
-        <activity android:name=".MarkActivity" />
+        <activity android:name=".MarkListActivity" />
         <activity android:name=".SubjectListActivity" />
-        <activity android:name=".ScheduleActivity"></activity>
+        <activity android:name=".ScheduleActivity" />
+        <activity android:name=".MarkActivity"></activity>
     </application>
 
 </manifest>

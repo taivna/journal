@@ -19,6 +19,7 @@ public class SubjectAddActivity extends AppCompatActivity
     Button saveSubject, saveItem;
     Spinner subjectSpinner, typeSpinner;
     ArrayAdapter<String>  subjectAdapter;
+    ArrayList<String> stringArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,7 +48,6 @@ public class SubjectAddActivity extends AppCompatActivity
 
         //setting up the subjectSpinner
         ArrayList<Subject> subjectArray = dbHelper.getAllSubjects();
-        ArrayList<String> stringArray = new ArrayList<>();
 
         for(Subject subject: subjectArray)
         {
@@ -72,6 +72,8 @@ public class SubjectAddActivity extends AppCompatActivity
         Subject subject = new Subject();
         subject.setName(subjectName.getText().toString());
         dbHelper.addSubject(subject);
+        stringArray.add(subject.getName());
+        subjectName.setText("");
         subjectAdapter.notifyDataSetChanged();
         Toast.makeText(getApplicationContext(), "Шинэ хичээл бүртгэлд нэмэгдээ", Toast.LENGTH_SHORT).show();
     }
@@ -85,9 +87,7 @@ public class SubjectAddActivity extends AppCompatActivity
         item.setName(itemName.getText().toString());
         item.setMark(Integer.parseInt(mark.getText().toString()));
         dbHelper.addItem(item);
-
         itemName.setText("");
-        mark.setText("");
         Toast.makeText(getApplicationContext(), "Шинэ " + item.getTypeName() + " бүртгэлд нэмэгдлээ", Toast.LENGTH_SHORT).show();
     }
 }

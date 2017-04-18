@@ -11,7 +11,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,14 +22,13 @@ public class AttendanceActivity extends AppCompatActivity
     int term;
     TextView tvDate;
     DBHelper dbHelper;
-    String subjectName;
     RadioGroup radioGroup;
     RadioButton radioButton;
     ArrayList<String> terms;
-    master2detail3 listAdapter;
+    Master2Detail3 listAdapter;
     ExpandableListView listView;
     ArrayList<Student> students;
-    String surName, name, state;
+    String s, subjectName, surName, name, state;
     ArrayList<Attendance> attendanceOld, attendanceNew;
     HashMap<String, List<String>> attendanceHashMap = new HashMap();
 
@@ -59,6 +57,7 @@ public class AttendanceActivity extends AppCompatActivity
         attendanceOld = dbHelper.getTodaysAttendance(formattedDate);
         attendanceNew = new ArrayList<>();
 
+        //loading attendance
         if(attendanceOld == null)
         {
             students = dbHelper.getAllStudents();
@@ -105,7 +104,7 @@ public class AttendanceActivity extends AppCompatActivity
             attendanceOld.clear();
         }
 
-        listAdapter = new master2detail3(this, terms, attendanceHashMap);
+        listAdapter = new Master2Detail3(this, terms, attendanceHashMap);
         listView.setAdapter(listAdapter);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -117,11 +116,10 @@ public class AttendanceActivity extends AppCompatActivity
                 term = Integer.valueOf(string.substring(0, 1));
                 subjectName = string.substring(string.indexOf("\t") + 1, string.length());
 
-                String s = attendanceHashMap.get(terms.get(groupPosition)).get(childPosition);
+                s = attendanceHashMap.get(terms.get(groupPosition)).get(childPosition);
                 surName = s.substring(0, s.indexOf("\t"));
                 name = s.substring(s.indexOf("\t") + 1, ordinalIndexOf(s, "\t", 2));
                 state = s.substring(ordinalIndexOf(s, "\t", 2) + 1, s.length());
-
                 radioGroup.clearCheck();
                 return false;
             }
@@ -153,6 +151,7 @@ public class AttendanceActivity extends AppCompatActivity
                             state = "Өвчтэй";
                             break;
                     }
+
                     for(Attendance attendance: attendanceNew)
                     {
                         if(attendance.getSurName().equals(surName))

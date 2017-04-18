@@ -11,7 +11,7 @@
         android:layout_weight="1"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/colorPrimary" />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_weight="1"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:textAlignment="center"
+        android:textAlignment="viewEnd"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

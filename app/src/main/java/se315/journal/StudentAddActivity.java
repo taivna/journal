@@ -68,4 +68,17 @@ public class StudentAddActivity extends AppCompatActivity
         Intent intent = new Intent(this, StudentListActivity.class);
         startActivity(intent);
     }
+
+    public void onResume()
+    {
+        super.onResume();
+
+        register.setText("");
+        name.setText("");
+        surName.setText("");
+        phoneNumber.setText("");
+        eMail.setText("");
+        address.setText("");
+        enrolledYear.setText("");
+    }
 }

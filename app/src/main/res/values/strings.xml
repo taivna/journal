@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">Ангийн багшийн журнал</string>
+    <string name="app_name">Журнал</string>
 
     <string name="att_btn_prev">Өмнөх</string>
     <string name="att_btn_next">Дараах</string>
     <string name="att_tv_date">2017-3-27</string>
     <string name="att_btn_back">Буцах</string>
     <string name="att_btn_save">Хадгалах</string>
-    <string name="att_title">"Ирц бүртгэл"</string>
-    <string name="att_present">"И"</string>
-    <string name="att_absent">"Т"</string>
-    <string name="att_late">"Х"</string>
-    <string name="att_sick">"Ө"</string>
+    <string name="att_title">Ирц бүртгэл</string>
+    <string name="att_present">И</string>
+    <string name="att_absent">Т</string>
+    <string name="att_late">Х</string>
+    <string name="att_sick">Ө</string>
 
     <string name="main_btn_backup">Backup/Restore</string>
     <string name="main_btn_students">Сурагч бүртгэл</string>
@@ -18,14 +18,19 @@
     <string name="main_btn_scores">Дүн бүртгэл</string>
     <string name="main_btn_attendance">Ирц бүртгэл</string>
 
-    <string name="stu_title">"Сурагчдийн жагсаалт"</string>
+    <string name="stu_title">Сурагчдийн жагсаалт</string>
     <string name="stu_btn_back">Буцах</string>
-    <string name="stu_btn_remove">Хасах</string>
     <string name="stu_btn_add">Нэмэх</string>
     <string name="stu_tv_ln">Овог</string>
     <string name="stu_tv_fn">Нэр</string>
+    <string name="stu_dialog_title1">Сонгосон сурагчийг бүртгэлээс хасах</string>
+    <string name="stu_dialog_title2">Cонгосон мэдээллийг өөрчлөх</string>
+    <string name="stu_message1">Та итгэлтэй байна уу?</string>
+    <string name="stu_message2">Шинэ утгууд оруулна уу</string>
+    <string name="stu_ok">Батгалгаажуулах</string>
+    <string name="stu_cancel">Болих</string>
 
-    <string name="stadd_title">"Сурагч бүртгэл"</string>
+    <string name="stadd_title">Сурагч бүртгэл</string>
     <string name="stadd_btn_back">Буцах</string>
     <string name="stadd_btn_cont">Үргэлжлүүлэх</string>
     <string name="stadd_btn_exit">Гарах</string>
@@ -49,9 +54,9 @@
     <string name="gua_et_relation">Сурагчийн юу нь болох</string>
     <string name="gua_et_register">Регистрийн дугаар</string>
     <string name="gua_et_student_register">Сурагчийн регистер</string>
-    <string name="gua_title">"Асран хамгаалагч бүртгэл"</string>
+    <string name="gua_title">Асран хамгаалагч бүртгэл</string>
 
-    <string name="addsbj_title">"Хичээл нэмэх"</string>
+    <string name="addsbj_title">Хичээл нэмэх</string>
     <string name="addsbj_et_subject">Хичээлийн нэр</string>
     <string name="addsbj_btn_save">Хадгалах</string>
     <string name="addsbj_et_name">Даалгавар/Шалгалтын нэр</string>
@@ -59,39 +64,42 @@
     <string name="addsbj_btn_back">Буцах</string>
     <string name="addsbj_btn_confirm">Хадгалах</string>
 
-    <string name="sbjlist_title">"Хичээлийн жагсаалт"</string>
+    <string name="sbjlist_title">Хичээлийн жагсаалт</string>
     <string name="sbjlist_btn_back">Буцах</string>
     <string name="sbjlist_btn_add">Нэмэх</string>
     <string name="sbjlist_btn_schedule">Хуваарь</string>
     <string name="sbjlist_tv_type">Төрөл</string>
     <string name="sbjlist_tv_mark">Өгөх оноо</string>
     <string name="sbjlist_tv_name">Нэр</string>
+    <string name="sbjlist_ok">Хасах</string>
+    <string name="sbjlist_cancel">Болих</string>
+    <string name="sbjlist_dialog_title">Сонгосон даалгавар/шалгалтыг хасах</string>
+    <string name="sbjlist_dialog_title1">Сонгосон хичээлийг бүртгэлээс хасах</string>
+    <string name="sbjlist_message">Та итгэлтэй байна уу?</string>
 
-    <string name="mark_title">"Дүнгийн бүртгэл"</string>
+    <string name="mark_title">Дүнгийн бүртгэл</string>
     <string name="mark_tv_ln">Овог</string>
     <string name="mark_tv_fn">Нэр</string>
     <string name="mark_tv_mark">Оноо</string>
     <string name="mark_btn_back">Буцах</string>
     <string name="mark_btn_save">Хадгалах</string>
-    <string name="mark_tv_student">Сурагчийн овог, нэр</string>
-    <string name="mark_et_score">Оноо</string>
 
-    <string name="sch_title">"Хичээлийн хуваарь"</string>
+    <string name="sch_title">Хичээлийн хуваарь</string>
     <string name="sch_btn_back">Буцах</string>
     <string name="sch_btn_save">Хадгалах</string>
-    <string name="sch_tv_00">"цаг/өдөр"</string>
-    <string name="sch_tv_01">"Mon"</string>
-    <string name="sch_tv_02">"Tue"</string>
-    <string name="sch_tv_03">"Wed"</string>
-    <string name="sch_tv_04">"Thu"</string>
-    <string name="sch_tv_05">"Fri"</string>
-    <string name="sch_et">"Нэр"</string>
-    <string name="sch_tv_10">"1-р цаг"</string>
-    <string name="sch_tv_20">"2-р цаг"</string>
-    <string name="sch_tv_30">"3-р цаг"</string>
-    <string name="sch_tv_40">"4-р цаг"</string>
-    <string name="sch_tv_50">"5-р цаг"</string>
-    <string name="sch_tv_60">"6-р цаг"</string>
+    <string name="sch_tv_00">цаг/өдөр</string>
+    <string name="sch_tv_01">Mon</string>
+    <string name="sch_tv_02">Tue</string>
+    <string name="sch_tv_03">Wed</string>
+    <string name="sch_tv_04">Thu</string>
+    <string name="sch_tv_05">Fri</string>
+    <string name="sch_et">Нэр</string>
+    <string name="sch_tv_10">1-р цаг</string>
+    <string name="sch_tv_20">2-р цаг</string>
+    <string name="sch_tv_30">3-р цаг</string>
+    <string name="sch_tv_40">4-р цаг</string>
+    <string name="sch_tv_50">5-р цаг</string>
+    <string name="sch_tv_60">6-р цаг</string>
 
     <string-array name="item_type_array">
         <item>Даалгавар</item>

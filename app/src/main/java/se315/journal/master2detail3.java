@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-public class master2detail3 extends BaseExpandableListAdapter
+public class Master2Detail3 extends BaseExpandableListAdapter
 {
     TextView listChild1, listChild2, listChild3, listHeader1, listHeader2;
     private Context context;
@@ -19,7 +19,7 @@ public class master2detail3 extends BaseExpandableListAdapter
     // child data in format of header title, child title
     private HashMap<String, List<String>> listDataChild;
 
-    public master2detail3(Context context, List<String> listDataHeader, HashMap<String, List<String>> listChildData)
+    public Master2Detail3(Context context, List<String> listDataHeader, HashMap<String, List<String>> listChildData)
     {
         this.context = context;
         this.listDataHeader = listDataHeader;

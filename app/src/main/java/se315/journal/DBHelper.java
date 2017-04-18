@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper
     private static final String ITEM_TABLE = "item";
     private static final String SCHEDULE_TABLE = "schedule";
     private static final String ATTENDANCE_TABLE = "attendance";
+    private static final String MARK_TABLE = "marks";
 
     private static final String COLUMN_REGISTER="register";
     private static final String COLUMN_NAME = "name";
@@ -44,6 +45,8 @@ public class DBHelper extends SQLiteOpenHelper
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_STATE = "state";
     private static final String COLUMN_TERM = "term";
+    private static final String COLUMN_SUBJECT_ID = "subject_id";
+    private static final String COLUMN_ITEM_ID = "item_id";
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     private static final String CREATE_STUDENT_TABLE = "CREATE TABLE " + STUDENT_TABLE +
@@ -112,6 +115,15 @@ public class DBHelper extends SQLiteOpenHelper
 
     private static final String DELETE_ATTENDANCE_TABLE = "DROP TABLE IF EXISTS " + ATTENDANCE_TABLE;
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    private static final String CREATE_MARK_TABLE = "CREATE TABLE " + MARK_TABLE + "(" +
+            COLUMN_STUDENT_REGISTER + " TEXT NOT NULL," +
+            COLUMN_SUBJECT_ID + " INTEGER NOT NULL," +
+            COLUMN_ITEM_ID + " INTEGER NOT NULL," +
+            COLUMN_MARK + " INTEGER NOT NULL," +
+            "PRIMARY KEY " + "(" + COLUMN_STUDENT_REGISTER + "," + COLUMN_SUBJECT_ID + "," + COLUMN_ITEM_ID + ")" + ")";
+
+    private static final String DELETE_MARK_TABLE = "DROP TABLE IF EXISTS " + MARK_TABLE;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     public DBHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -125,6 +137,7 @@ public class DBHelper extends SQLiteOpenHelper
         db.execSQL(CREATE_ITEM_TABLE);
         db.execSQL(CREATE_SCHEDULE_TABLE);
         db.execSQL(CREATE_ATTENDANCE_TABLE);
+        db.execSQL(CREATE_MARK_TABLE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -135,6 +148,7 @@ public class DBHelper extends SQLiteOpenHelper
         db.execSQL(DELETE_ITEM_TABLE);
         db.execSQL(DELETE_SCHEDULE_TABLE);
         db.execSQL(DELETE_ATTENDANCE_TABLE);
+        db.execSQL(DELETE_MARK_TABLE);
         onCreate(db);
     }
 
@@ -336,6 +350,32 @@ public class DBHelper extends SQLiteOpenHelper
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_SUBJECT_NAME + " =?",
                 new String[] {subject.getName()});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Item item = new Item();
+                item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+                item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+                item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+                subjectItems.add(item);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return subjectItems;
+    }
+
+    public ArrayList<Item> getSubjectItems(String name)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Item> subjectItems = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_SUBJECT_NAME + " =?",
+                new String[] {name});
 
         if(cursor .moveToFirst())
         {
@@ -582,5 +622,51 @@ public class DBHelper extends SQLiteOpenHelper
             db.close();
             return false;
         }
+    }
+
+    public void removeSubject(String name)
+    {
+        ArrayList<Item> items = getSubjectItems(name);
+        for(Item item: items)
+        {
+            SQLiteDatabase db = this. getWritableDatabase();
+            db.delete(ITEM_TABLE, COLUMN_SUBJECT_NAME + " =?", new String[] {name});
+        }
+        SQLiteDatabase db = this. getWritableDatabase();
+        db.delete(SUBJECT_TABLE, COLUMN_NAME + " =?", new String[] {name});
+        db.close();
+    }
+
+    public void removeItem(String name)
+    {
+        SQLiteDatabase db = this. getWritableDatabase();
+        db.delete(ITEM_TABLE, COLUMN_NAME + " =?", new String[] {name});
+        db.close();
+    }
+
+    public ArrayList<Mark> getMarks()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Mark> marks = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MARK_TABLE, null);
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Mark mark = new Mark();
+                mark.setStudentRegister(cursor.getString(cursor.getColumnIndex(COLUMN_STUDENT_REGISTER)));
+                mark.setSubjectId(cursor.getInt(cursor.getColumnIndex(COLUMN_SUBJECT_ID)));
+                mark.setItemId(cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_ID)));
+                mark.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+
+                marks.add(mark);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return marks;
     }
 }
