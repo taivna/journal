@@ -1,6 +1,8 @@
 package se315.journal;
 
-public class Mark
+import java.io.Serializable;
+
+public class Mark implements Serializable
 {
     String studentRegister;
     int subjectId, itemId, mark;

@@ -290,6 +290,36 @@ public class DBHelper extends SQLiteOpenHelper
         return subjectList;
     }
 
+    public Subject getSubject(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SUBJECT_TABLE  + " WHERE " + COLUMN_ID + " =?",
+                new String[] {String.valueOf(id)});
+
+        Subject subject = new Subject();
+        subject.setId(id);
+        subject.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+
+        cursor.close();
+        db.close();
+        return subject;
+    }
+
+    public Subject getSubject(String name)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SUBJECT_TABLE  + " WHERE " + COLUMN_NAME + " =?",
+                new String[] {name});
+
+        Subject subject = new Subject();
+        subject.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+        subject.setName(name);
+
+        cursor.close();
+        db.close();
+        return subject;
+    }
+
     public ArrayList<String> getStudentDetails(Student student)
     {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -343,6 +373,31 @@ public class DBHelper extends SQLiteOpenHelper
         return student;
     }
 
+    public Student getStudent(String register)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Student student = new Student();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + STUDENT_TABLE + " WHERE " + COLUMN_REGISTER + " = ?",
+                new String[] {register});
+
+        if(cursor.moveToFirst())
+        {
+            student.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            student.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+            student.setPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE_NUMBER)));
+            student.setEMail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
+            student.setAddress(cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS)));
+            student.setRegister(cursor.getString(cursor.getColumnIndex(COLUMN_REGISTER)));
+            student.setEnrolledYear(cursor.getInt(cursor.getColumnIndex(COLUMN_ENROLLED_YEAR)));
+            student.setGender(cursor.getString(cursor.getColumnIndex(COLUMN_GENDER)));
+        }
+
+        cursor.close();
+        db.close();
+        return student;
+    }
+
     public ArrayList<Item> getSubjectItems(Subject subject)
     {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -376,6 +431,32 @@ public class DBHelper extends SQLiteOpenHelper
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_SUBJECT_NAME + " =?",
                 new String[] {name});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Item item = new Item();
+                item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+                item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+                item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+                subjectItems.add(item);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return subjectItems;
+    }
+
+    public ArrayList<Item> getSubjectItems(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Item> subjectItems = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_ID + " =?",
+                new String[] {String.valueOf(id)});
 
         if(cursor .moveToFirst())
         {

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,18 +31,45 @@ public class MarkListActivity extends AppCompatActivity
         dbHelper = new DBHelper(this);
         marks = dbHelper.getMarks();
         expListView = (ExpandableListView)findViewById(R.id.marklist_explv);
-        ArrayList<String> studentNames = new ArrayList<>();
+        final ArrayList<String> studentNames = new ArrayList<>();
         markListHashMap = new HashMap<>();
+        students = dbHelper.getAllStudents();
+        subjects = dbHelper.getAllSubjects();
 
-        if(marks == null)
+        if(marks.size() > 0)
         {
+            ArrayList<String> subjectNames = new ArrayList<>();
 
+            for(Mark mark: marks)
+            {
+                Student student = dbHelper.getStudent(mark.getStudentRegister());
+                String fullName = student.getSurName() + "\t" + student.getName();
+                studentNames.add(fullName);
+
+                Subject subject = dbHelper.getSubject(mark.getSubjectId());
+                String subjectName = subject.getName();
+                subjectNames.add(subjectName);
+            }
+
+            for(String student: studentNames)
+            {
+                for(String subject: subjectNames)
+                {
+                    ArrayList<Item> items = dbHelper.getSubjectItems(subject);
+                    int total = 0;
+                    int index = 0;
+
+                    for(Item item: items)
+                        total += item.getMark();
+
+                    subjectNames.set(index, subject + "\t" + total);
+                    index++;
+                }
+                markListHashMap.put(student, subjectNames);
+            }
         }
         else
         {
-            students = dbHelper.getAllStudents();
-            subjects = dbHelper.getAllSubjects();
-
             for(Student student: students)
             {
                 ArrayList<String> subjectNames = new ArrayList<>();
@@ -55,11 +83,35 @@ public class MarkListActivity extends AppCompatActivity
                 }
                 markListHashMap.put(studentFullName, subjectNames);
             }
-            masterDetail = new Master2Detail2(this, studentNames, markListHashMap);
-            expListView.setAdapter(masterDetail);
         }
+        masterDetail = new Master2Detail2(this, studentNames, markListHashMap);
+        expListView.setAdapter(masterDetail);
 
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
+        {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPos, int childPos, long id)
+            {
+                String fullName = studentNames.get(groupPos);
+                String surName = fullName.substring(0, fullName.indexOf("\t"));
+                String name = fullName.substring(fullName.indexOf("\t") + 1, fullName.length());
+                Toast.makeText(getApplicationContext(), groupPos + "," + childPos, Toast.LENGTH_SHORT).show();
+                String childText = markListHashMap.get(fullName).get(childPos);
+                String subjectName = childText.substring(0, childText.indexOf("\t"));
+                Student student = dbHelper.getStudent(name, surName);
+                Subject subject = dbHelper.getSubject(subjectName);
 
+                Mark mark = new Mark();
+                mark.setStudentRegister(student.getRegister());
+                mark.setSubjectId(subject.getId());
+
+                Intent intent = new Intent(getApplicationContext(), MarkActivity.class);
+                intent.putExtra("mark", mark);
+                startActivity(intent);
+
+                return false;
+            }
+        });
     }
 
     public void switchToMain(View view)
