@@ -72,8 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:hint="@string/sch_et"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/sch_et_12"
