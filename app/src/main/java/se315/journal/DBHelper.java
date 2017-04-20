@@ -444,6 +444,7 @@ public class DBHelper extends SQLiteOpenHelper
             while(!cursor.isAfterLast())
             {
                 Item item = new Item();
+                item.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
                 item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
                 item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
@@ -825,19 +826,24 @@ public class DBHelper extends SQLiteOpenHelper
         return items;
     }
 
-    public String getItemName(int itemId)
+    public Item getItem(int itemId)
     {
         SQLiteDatabase db = this.getReadableDatabase();
-        String itemName = new String();
+        Item item = new Item();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_ID + " =?",
                 new String[] {String.valueOf(itemId)});
 
         if(cursor .moveToFirst())
-            itemName = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
-
+        {
+            item.setId(itemId);
+            item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+            item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+            item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+        }
         cursor.close();
         db.close();
-        return itemName;
+        return item;
     }
 }

@@ -20,7 +20,7 @@ public class MarkActivity extends AppCompatActivity
     DBHelper dbHelper;
     ListView listView;
     ListAdapter listAdapter;
-    ArrayList<Item> items;
+    ArrayList<Item> items, markItems;
     Student student;
     Subject subject;
 
@@ -39,18 +39,20 @@ public class MarkActivity extends AppCompatActivity
         String title = student.getSurName().substring(0, 1) + "." + student.getName() + ":\t" + subject.getName();
         getSupportActionBar().setTitle(title);
 
-        items = dbHelper.getMarkItems(mark);
+        items = dbHelper.getSubjectItems(subject);
+        markItems = dbHelper.getMarkItems(mark);
 
-        if(items.size() > 0)
-            for(Item item: items)
+        for(Item item: items)
+        {
+            item.setMark(0);
+
+            for(Item markItem: markItems)
             {
-                String itemName = dbHelper.getItemName(item.getId());
-                item.setName(itemName);
+                String itemName = dbHelper.getItem(markItem.getId()).getName();
+                if(item.getName().equals(itemName))
+                    item.setMark(markItem.getMark());
             }
-        else
-            items = dbHelper.getSubjectItems(subject.getName());
-
-
+        }
 
         listAdapter = new ListAdapter(this, R.layout.details2, items);
         listView.setAdapter(listAdapter);
@@ -71,7 +73,7 @@ public class MarkActivity extends AppCompatActivity
                 builder.setTitle(R.string.mark_dialog_title);
                 builder.setMessage(R.string.mark_dialog_message);
 
-                Item item = items.get(position);
+                final Item item = items.get(position);
                 String name = item.getName();
                 etName.setText(name);
                 etName.setEnabled(false);
@@ -82,8 +84,25 @@ public class MarkActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int id)
                     {
                         int mark = Integer.valueOf(etMark.getText().toString());
-                        items.get(position).setMark(mark);
-                        listAdapter.notifyDataSetChanged();
+                        ArrayList<Item> itemList = dbHelper.getSubjectItems(subject);
+                        int maxMark = 0;
+
+                        for(Item i: itemList)
+                        {
+                            if(i.getName().equals(item.getName()))
+                                maxMark = i.getMark();
+                        }
+
+                        if(mark > maxMark)
+                        {
+                            Toast.makeText(MarkActivity.this, "Энэ шалгалт/даалгаварын дээд оноо: " + maxMark,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            items.get(position).setMark(mark);
+                            listAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
                 builder.setNegativeButton(R.string.stu_cancel, new DialogInterface.OnClickListener()

@@ -64,37 +64,26 @@ public class MarkListActivity extends AppCompatActivity
 
                 for(String s: subjects)
                 {
-                    String s1 = s.substring(0, s.indexOf("\t"));
-                    String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
-
-                    if(s1.equals(s2))
+                    try
                     {
-                        s = s.substring(0, s.indexOf("\t"));
-                        s = s + subjectName.substring(subjectName.indexOf("\t") + 1, subjectName.length());
-                        markListHashMap.get(fullName).set(index, s);
+                        String s1 = s.substring(0, s.indexOf("\t"));
+                        String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
+
+                        if(s1.equals(s2))
+                        {
+                            s = s.substring(0, s.indexOf("\t"));
+                            s = s + "\t" + subjectName.substring(subjectName.indexOf("\t") + 1, subjectName.length());
+                            markListHashMap.get(fullName).set(index, s);
+                        }
+                        else
+                            index++;
                     }
-                    else
-                        index++;
+                    catch(StringIndexOutOfBoundsException e)
+                    {
+                        System.out.println(e);
+                    }
                 }
             }
-
-            /*for(Mark mark: marks)
-            {
-                ArrayList<String> subjectNames = new ArrayList<>();
-                Student student = dbHelper.getStudent(mark.getStudentRegister());
-                String fullName = student.getSurName() + "\t" + student.getName();
-                if(!studentNames.contains(fullName))
-                    studentNames.add(fullName);
-
-                Subject subject = dbHelper.getSubject(mark.getSubjectId());
-                String subjectName = subject.getName() + "\t";
-                int total = dbHelper.getTotal(mark);
-                subjectName = subjectName + total;
-                if(!subjectNames.contains(subjectName))
-                    subjectNames.add(subjectName);
-
-                markListHashMap.put(fullName, subjectNames);
-            }*/
         }
         else
         {

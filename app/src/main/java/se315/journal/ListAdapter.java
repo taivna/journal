@@ -28,7 +28,7 @@ public class ListAdapter extends ArrayAdapter
         {
             LayoutInflater inflater;
             inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.details2, null);
+            convertView = inflater.inflate(R.layout.details3, null);
         }
 
         Item item = (Item) getItem(position);
@@ -36,11 +36,17 @@ public class ListAdapter extends ArrayAdapter
         if(item != null)
         {
             TextView name = (TextView) convertView.findViewById(R.id.list_detail1);
-            TextView mark = (TextView) convertView.findViewById(R.id.list_detail2);
+            TextView type = (TextView) convertView.findViewById(R.id.list_detail2);
+            TextView mark = (TextView) convertView.findViewById(R.id.list_detail3);
 
             if(name != null)
             {
                 name.setText(item.getName());
+            }
+
+            if(name != null)
+            {
+                type.setText(item.getTypeName());
             }
 
             if(mark != null)
