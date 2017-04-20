@@ -64,24 +64,17 @@ public class MarkListActivity extends AppCompatActivity
 
                 for(String s: subjects)
                 {
-                    try
-                    {
-                        String s1 = s.substring(0, s.indexOf("\t"));
-                        String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
 
-                        if(s1.equals(s2))
-                        {
-                            s = s.substring(0, s.indexOf("\t"));
-                            s = s + "\t" + subjectName.substring(subjectName.indexOf("\t") + 1, subjectName.length());
-                            markListHashMap.get(fullName).set(index, s);
-                        }
-                        else
-                            index++;
-                    }
-                    catch(StringIndexOutOfBoundsException e)
+                    String s1 = s.substring(0, s.indexOf("\t"));
+                    String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
+
+                    if(s1.equals(s2))
                     {
-                        System.out.println(e);
+                        s = subjectName;
+                        markListHashMap.get(fullName).set(index, s);
                     }
+                    else
+                        index++;
                 }
             }
         }
