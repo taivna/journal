@@ -39,7 +39,19 @@ public class MarkActivity extends AppCompatActivity
         String title = student.getSurName().substring(0, 1) + "." + student.getName() + ":\t" + subject.getName();
         getSupportActionBar().setTitle(title);
 
-        items = dbHelper.getSubjectItems(subject);
+        items = dbHelper.getMarkItems(mark);
+
+        if(items.size() > 0)
+            for(Item item: items)
+            {
+                String itemName = dbHelper.getItemName(item.getId());
+                item.setName(itemName);
+            }
+        else
+            items = dbHelper.getSubjectItems(subject.getName());
+
+
+
         listAdapter = new ListAdapter(this, R.layout.details2, items);
         listView.setAdapter(listAdapter);
 

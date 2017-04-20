@@ -457,32 +457,6 @@ public class DBHelper extends SQLiteOpenHelper
         return subjectItems;
     }
 
-    public ArrayList<Item> getSubjectItems(int id)
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Item> subjectItems = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_ID + " =?",
-                new String[] {String.valueOf(id)});
-
-        if(cursor .moveToFirst())
-        {
-            while(!cursor.isAfterLast())
-            {
-                Item item = new Item();
-                item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-                item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
-                item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
-                item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
-                subjectItems.add(item);
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        db.close();
-        return subjectItems;
-    }
-
     public boolean isTableEmpty(String tableName)
     {
         SQLiteDatabase  db = this.getWritableDatabase();
@@ -803,5 +777,67 @@ public class DBHelper extends SQLiteOpenHelper
             db.close();
             return false;
         }
+    }
+
+    public int getTotal(Mark mark)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int total = 0;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MARK_TABLE + " WHERE " + COLUMN_STUDENT_REGISTER + " =? AND "
+                + COLUMN_SUBJECT_ID + " =?", new String[] {mark.getStudentRegister(), String.valueOf(mark.getSubjectId())});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                int score = cursor.getInt(cursor.getColumnIndex(COLUMN_MARK));
+                total = total + score;
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return total;
+    }
+
+    public ArrayList<Item> getMarkItems(Mark mark)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Item> items = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MARK_TABLE + " WHERE " + COLUMN_STUDENT_REGISTER + " =? AND "
+                + COLUMN_SUBJECT_ID + " =?", new String[] {mark.getStudentRegister(), String.valueOf(mark.getSubjectId())});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Item item = new Item();
+                item.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_ID)));
+                item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+                items.add(item);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return items;
+    }
+
+    public String getItemName(int itemId)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String itemName = new String();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_ID + " =?",
+                new String[] {String.valueOf(itemId)});
+
+        if(cursor .moveToFirst())
+            itemName = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
+
+        cursor.close();
+        db.close();
+        return itemName;
     }
 }

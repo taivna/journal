@@ -38,35 +38,63 @@ public class MarkListActivity extends AppCompatActivity
 
         if(marks.size() > 0)
         {
-            ArrayList<String> subjectNames = new ArrayList<>();
+            for(Student student: students)
+            {
+                ArrayList<String> subjectNames = new ArrayList<>();
+                String studentFullName = student.getSurName() + "\t" + student.getName();
+                studentNames.add(studentFullName);
+
+                for(Subject subject: subjects)
+                {
+                    String subjectName = subject.getName() + "\t" + 0;
+                    subjectNames.add(subjectName);
+                }
+                markListHashMap.put(studentFullName, subjectNames);
+            }
 
             for(Mark mark: marks)
             {
                 Student student = dbHelper.getStudent(mark.getStudentRegister());
                 String fullName = student.getSurName() + "\t" + student.getName();
-                studentNames.add(fullName);
+                Subject subject = dbHelper.getSubject(mark.getSubjectId());
+                String subjectName = subject.getName() + "\t";
+                subjectName = subjectName + dbHelper.getTotal(mark);
+                ArrayList<String> subjects = (ArrayList<String>) markListHashMap.get(fullName);
+                int index = 0;
+
+                for(String s: subjects)
+                {
+                    String s1 = s.substring(0, s.indexOf("\t"));
+                    String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
+
+                    if(s1.equals(s2))
+                    {
+                        s = s.substring(0, s.indexOf("\t"));
+                        s = s + subjectName.substring(subjectName.indexOf("\t") + 1, subjectName.length());
+                        markListHashMap.get(fullName).set(index, s);
+                    }
+                    else
+                        index++;
+                }
+            }
+
+            /*for(Mark mark: marks)
+            {
+                ArrayList<String> subjectNames = new ArrayList<>();
+                Student student = dbHelper.getStudent(mark.getStudentRegister());
+                String fullName = student.getSurName() + "\t" + student.getName();
+                if(!studentNames.contains(fullName))
+                    studentNames.add(fullName);
 
                 Subject subject = dbHelper.getSubject(mark.getSubjectId());
-                String subjectName = subject.getName();
-                subjectNames.add(subjectName);
-            }
+                String subjectName = subject.getName() + "\t";
+                int total = dbHelper.getTotal(mark);
+                subjectName = subjectName + total;
+                if(!subjectNames.contains(subjectName))
+                    subjectNames.add(subjectName);
 
-            for(String student: studentNames)
-            {
-                for(String subject: subjectNames)
-                {
-                    ArrayList<Item> items = dbHelper.getSubjectItems(subject);
-                    int total = 0;
-                    int index = 0;
-
-                    for(Item item: items)
-                        total += item.getMark();
-
-                    subjectNames.set(index, subject + "\t" + total);
-                    index++;
-                }
-                markListHashMap.put(student, subjectNames);
-            }
+                markListHashMap.put(fullName, subjectNames);
+            }*/
         }
         else
         {

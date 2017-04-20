@@ -33,7 +33,7 @@ public class ListAdapter extends ArrayAdapter
 
         Item item = (Item) getItem(position);
 
-        if (item != null)
+        if(item != null)
         {
             TextView name = (TextView) convertView.findViewById(R.id.list_detail1);
             TextView mark = (TextView) convertView.findViewById(R.id.list_detail2);
