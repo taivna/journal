@@ -37,4 +37,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, MarkListActivity.class);
         startActivity(intent);
     }
+
+    public void switchToBackup(View view)
+    {
+        Intent intent = new Intent(this, BackupRestoreActivity.class);
+        startActivity(intent);
+    }
 }
