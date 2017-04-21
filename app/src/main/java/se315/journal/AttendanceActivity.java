@@ -54,6 +54,111 @@ public class AttendanceActivity extends AppCompatActivity
         String formattedDate = dateFormat.format(calendar.getTime());
         tvDate.setText(formattedDate);
 
+        loadAttendance(formattedDate);
+
+        listAdapter = new Master2Detail3(this, terms, attendanceHashMap);
+        listView.setAdapter(listAdapter);
+
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
+        {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View view, final int groupPosition, final int childPosition, long l)
+            {
+                String string = terms.get(groupPosition);
+                term = Integer.valueOf(string.substring(0, 1));
+                subjectName = string.substring(string.indexOf("\t") + 1, string.length());
+
+                s = attendanceHashMap.get(terms.get(groupPosition)).get(childPosition);
+                surName = s.substring(0, s.indexOf("\t"));
+                name = s.substring(s.indexOf("\t") + 1, ordinalIndexOf(s, "\t", 2));
+                state = s.substring(ordinalIndexOf(s, "\t", 2) + 1, s.length());
+                //radioGroup.clearCheck();
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i)
+                    {
+                        if(radioGroup.getCheckedRadioButtonId() != -1)
+                        {
+                            radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+
+                            char c = radioButton.getText().toString().charAt(0);
+
+                            switch (c)
+                            {
+                                case 'И':
+                                    state = "Ирсэн";
+                                    break;
+                                case 'Т':
+                                    state = "Тасалсан";
+                                    break;
+                                case 'Х':
+                                    state = "Хоцорсон";
+                                    break;
+                                case 'Ө':
+                                    state = "Өвчтэй";
+                                    break;
+                            }
+
+                            s = s.substring(0, ordinalIndexOf(s, "\t", 2)) + "\t" + state;
+                            attendanceHashMap.get(terms.get(groupPosition)).set(childPosition, s);
+                            listAdapter.notifyDataSetChanged();
+
+                            for(Attendance attendance: attendanceNew)
+                            {
+                                if(attendance.getSurName().equals(surName))
+                                    if(attendance.getName().equals(name))
+                                        if(attendance.getTerm() == term)
+                                            attendance.setState(state);
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+    }
+
+    public void switchToMain(View view)
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void saveAttendance(View view)
+    {
+        boolean updated = true;
+
+        for(Attendance attendance: attendanceNew)
+        {
+            if(dbHelper.attendanceExists(attendance))
+            {
+                dbHelper.deleteAttendance(attendance);
+                dbHelper.addAttendance(attendance);
+            }
+            else
+            {
+                dbHelper.addAttendance(attendance);
+                updated = false;
+            }
+        }
+        if(updated)
+            Toast.makeText(this, "Ирц шинэчлэгдлээ", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "Ирц нэмэгдлээ", Toast.LENGTH_SHORT).show();
+    }
+
+    public static int ordinalIndexOf(String str, String substr, int n)
+    {
+        int pos = str.indexOf(substr);
+        while (--n > 0 && pos != -1)
+            pos = str.indexOf(substr, pos + 1);
+        return pos;
+    }
+
+    public void loadAttendance(String formattedDate)
+    {
         attendanceOld = dbHelper.getTodaysAttendance(formattedDate);
         attendanceNew = new ArrayList<>();
 
@@ -103,107 +208,5 @@ public class AttendanceActivity extends AppCompatActivity
                 attendanceNew.add(attendance);
             attendanceOld.clear();
         }
-
-        listAdapter = new Master2Detail3(this, terms, attendanceHashMap);
-        listView.setAdapter(listAdapter);
-
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
-        {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View view, final int groupPosition, final int childPosition, long l)
-            {
-                String string = terms.get(groupPosition);
-                term = Integer.valueOf(string.substring(0, 1));
-                subjectName = string.substring(string.indexOf("\t") + 1, string.length());
-
-                s = attendanceHashMap.get(terms.get(groupPosition)).get(childPosition);
-                surName = s.substring(0, s.indexOf("\t"));
-                name = s.substring(s.indexOf("\t") + 1, ordinalIndexOf(s, "\t", 2));
-                state = s.substring(ordinalIndexOf(s, "\t", 2) + 1, s.length());
-                radioGroup.clearCheck();
-
-                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-                {
-                    @Override
-                    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i)
-                    {
-                        if(radioGroup.getCheckedRadioButtonId() != -1)
-                        {
-                            radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
-
-                            char c = radioButton.getText().toString().charAt(0);
-
-                            switch (c)
-                            {
-                                case 'И':
-                                    state = "Ирсэн";
-                                    break;
-                                case 'Т':
-                                    state = "Тасалсан";
-                                    break;
-                                case 'Х':
-                                    state = "Хоцорсон";
-                                    break;
-                                case 'Ө':
-                                    state = "Өвчтэй";
-                                    break;
-                            }
-
-                            s = s.substring(0, ordinalIndexOf(s, "\t", 2)) + "\t" + state;
-                            attendanceHashMap.get(terms.get(groupPosition)).set(childPosition, s);
-                            listAdapter.notifyDataSetChanged();
-
-                            for(Attendance attendance: attendanceNew)
-                            {
-                                if(attendance.getSurName().equals(surName))
-                                    if(attendance.getName().equals(name))
-                                        if(attendance.getTerm() == term)
-                                            attendance.setState(state);
-                            }
-                        }
-                    }
-                });
-                return false;
-            }
-        });
-
-
-    }
-
-    public void switchToMain(View view)
-    {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void saveAttendance(View view)
-    {
-        boolean updated = true;
-
-        for(Attendance attendance: attendanceNew)
-        {
-            if(dbHelper.attendanceExists(attendance))
-            {
-                dbHelper.deleteAttendance(attendance);
-                dbHelper.addAttendance(attendance);
-            }
-            else
-            {
-                dbHelper.addAttendance(attendance);
-                updated = false;
-            }
-        }
-        if(updated)
-            Toast.makeText(this, "Ирц шинэчлэгдлээ", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "Ирц нэмэгдлээ", Toast.LENGTH_SHORT).show();
-    }
-
-    public static int ordinalIndexOf(String str, String substr, int n)
-    {
-        int pos = str.indexOf(substr);
-        while (--n > 0 && pos != -1)
-            pos = str.indexOf(substr, pos + 1);
-        return pos;
     }
 }
