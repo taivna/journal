@@ -702,6 +702,8 @@ public class DBHelper extends SQLiteOpenHelper
 
     public void removeItem(String name)
     {
+        Item item = getItem(name);
+        removeItemMarks(item);
         SQLiteDatabase db = this. getWritableDatabase();
         db.delete(ITEM_TABLE, COLUMN_NAME + " =?", new String[] {name});
         db.close();
@@ -845,5 +847,33 @@ public class DBHelper extends SQLiteOpenHelper
         cursor.close();
         db.close();
         return item;
+    }
+
+    public Item getItem(String itemName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Item item = new Item();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_NAME + " =?",
+                new String[] {itemName});
+
+        if(cursor .moveToFirst())
+        {
+            item.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+            item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
+            item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+        }
+        cursor.close();
+        db.close();
+        return item;
+    }
+
+    public void removeItemMarks(Item item)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(MARK_TABLE, COLUMN_ITEM_ID + " =?", new String[] {String.valueOf(item.getId())});
+        db.close();
     }
 }

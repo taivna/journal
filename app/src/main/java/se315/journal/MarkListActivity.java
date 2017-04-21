@@ -36,35 +36,50 @@ public class MarkListActivity extends AppCompatActivity
         students = dbHelper.getAllStudents();
         subjects = dbHelper.getAllSubjects();
 
+        for(Student student: students)
+        {
+            ArrayList<String> subjectNames = new ArrayList<>();
+            String studentFullName = student.getSurName() + "\t" + student.getName();
+            studentNames.add(studentFullName);
+
+            for(Subject subject: subjects)
+            {
+                String subjectName = subject.getName() + "\t" + 0 + "F";
+                subjectNames.add(subjectName);
+            }
+            markListHashMap.put(studentFullName, subjectNames);
+        }
         if(marks.size() > 0)
         {
-            for(Student student: students)
-            {
-                ArrayList<String> subjectNames = new ArrayList<>();
-                String studentFullName = student.getSurName() + "\t" + student.getName();
-                studentNames.add(studentFullName);
-
-                for(Subject subject: subjects)
-                {
-                    String subjectName = subject.getName() + "\t" + 0;
-                    subjectNames.add(subjectName);
-                }
-                markListHashMap.put(studentFullName, subjectNames);
-            }
-
             for(Mark mark: marks)
             {
                 Student student = dbHelper.getStudent(mark.getStudentRegister());
                 String fullName = student.getSurName() + "\t" + student.getName();
                 Subject subject = dbHelper.getSubject(mark.getSubjectId());
                 String subjectName = subject.getName() + "\t";
-                subjectName = subjectName + dbHelper.getTotal(mark);
+                int score = dbHelper.getTotal(mark);
+
+
+                if(score < 60)
+                    subjectName = subjectName + score + "F";
+
+                if(score < 70 && score >= 60)
+                    subjectName = subjectName + score + "D";
+
+                if(score < 80 && score >= 70)
+                    subjectName = subjectName + score + "C";
+
+                if(score < 90 && score >= 80)
+                    subjectName = subjectName + score + "B";
+
+                if(score <= 100 && score >= 90)
+                    subjectName = subjectName + score + "A";
+
                 ArrayList<String> subjects = (ArrayList<String>) markListHashMap.get(fullName);
                 int index = 0;
 
                 for(String s: subjects)
                 {
-
                     String s1 = s.substring(0, s.indexOf("\t"));
                     String s2 = subjectName.substring(0, subjectName.indexOf("\t"));
 
@@ -78,22 +93,7 @@ public class MarkListActivity extends AppCompatActivity
                 }
             }
         }
-        else
-        {
-            for(Student student: students)
-            {
-                ArrayList<String> subjectNames = new ArrayList<>();
-                String studentFullName = student.getSurName() + "\t" + student.getName();
-                studentNames.add(studentFullName);
 
-                for(Subject subject: subjects)
-                {
-                    String subjectName = subject.getName() + "\t0";
-                    subjectNames.add(subjectName);
-                }
-                markListHashMap.put(studentFullName, subjectNames);
-            }
-        }
         masterDetail = new Master2Detail2(this, studentNames, markListHashMap);
         expListView.setAdapter(masterDetail);
 

@@ -110,7 +110,7 @@ public class AttendanceActivity extends AppCompatActivity
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
         {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long l)
+            public boolean onChildClick(ExpandableListView parent, View view, final int groupPosition, final int childPosition, long l)
             {
                 String string = terms.get(groupPosition);
                 term = Integer.valueOf(string.substring(0, 1));
@@ -121,47 +121,53 @@ public class AttendanceActivity extends AppCompatActivity
                 name = s.substring(s.indexOf("\t") + 1, ordinalIndexOf(s, "\t", 2));
                 state = s.substring(ordinalIndexOf(s, "\t", 2) + 1, s.length());
                 radioGroup.clearCheck();
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i)
+                    {
+                        if(radioGroup.getCheckedRadioButtonId() != -1)
+                        {
+                            radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
+
+                            char c = radioButton.getText().toString().charAt(0);
+
+                            switch (c)
+                            {
+                                case 'И':
+                                    state = "Ирсэн";
+                                    break;
+                                case 'Т':
+                                    state = "Тасалсан";
+                                    break;
+                                case 'Х':
+                                    state = "Хоцорсон";
+                                    break;
+                                case 'Ө':
+                                    state = "Өвчтэй";
+                                    break;
+                            }
+
+                            s = s.substring(0, ordinalIndexOf(s, "\t", 2)) + "\t" + state;
+                            attendanceHashMap.get(terms.get(groupPosition)).set(childPosition, s);
+                            listAdapter.notifyDataSetChanged();
+
+                            for(Attendance attendance: attendanceNew)
+                            {
+                                if(attendance.getSurName().equals(surName))
+                                    if(attendance.getName().equals(name))
+                                        if(attendance.getTerm() == term)
+                                            attendance.setState(state);
+                            }
+                        }
+                    }
+                });
                 return false;
             }
         });
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i)
-            {
-                if(radioGroup.getCheckedRadioButtonId() != -1)
-                {
-                    radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
 
-                    char c = radioButton.getText().toString().charAt(0);
-
-                    switch (c)
-                    {
-                        case 'И':
-                            state = "Ирсэн";
-                            break;
-                        case 'Т':
-                            state = "Тасалсан";
-                            break;
-                        case 'Х':
-                            state = "Хоцорсон";
-                            break;
-                        case 'Ө':
-                            state = "Өвчтэй";
-                            break;
-                    }
-
-                    for(Attendance attendance: attendanceNew)
-                    {
-                        if(attendance.getSurName().equals(surName))
-                            if(attendance.getName().equals(name))
-                                if(attendance.getTerm() == term)
-                                    attendance.setState(state);
-                    }
-                }
-            }
-        });
     }
 
     public void switchToMain(View view)
