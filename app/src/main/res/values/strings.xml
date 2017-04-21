@@ -26,7 +26,7 @@
     <string name="stu_dialog_title1">Сонгосон сурагчийг бүртгэлээс хасах</string>
     <string name="stu_dialog_title2">Cонгосон мэдээллийг өөрчлөх</string>
     <string name="stu_message1">Та итгэлтэй байна уу?</string>
-    <string name="stu_message2">Шинэ утгууд оруулна уу</string>
+    <string name="stu_message2">Шинэ утга оруулна уу</string>
     <string name="stu_ok">Батгалгаажуулах</string>
     <string name="stu_cancel">Болих</string>
 
@@ -84,7 +84,7 @@
     <string name="mark_btn_back">Буцах</string>
     <string name="mark_btn_save">Хадгалах</string>
     <string name="mark_dialog_title">Шалгалт/Даалгаварын оноог өөрчлөх</string>
-    <string name="mark_dialog_message">Шинэ оноо оруулна уу</string>
+    <string name="mark_dialog_message">Шинэ утга оруулна уу</string>
 
     <string name="sch_title">Хичээлийн хуваарь</string>
     <string name="sch_btn_back">Буцах</string>
@@ -102,6 +102,11 @@
     <string name="sch_tv_40">4-р цаг</string>
     <string name="sch_tv_50">5-р цаг</string>
     <string name="sch_tv_60">6-р цаг</string>
+
+    <string name="gi_dialog_title">Сонгосон мэдээллийг өөрчлөх</string>
+    <string name="gi_dialog_message">Шинэ утга оруулна уу</string>
+    <string name="gi_ok_btn">Баталгаажуулах</string>
+    <string name="gi_cancel_btn">Болих</string>
 
     <string-array name="item_type_array">
         <item>Даалгавар</item>

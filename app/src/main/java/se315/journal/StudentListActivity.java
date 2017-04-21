@@ -1,6 +1,7 @@
 package se315.journal;
 
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ public class StudentListActivity extends AppCompatActivity
     ExpandableListView masterDetail;
     Master2Detail2 listAdapter;
     DBHelper dbHelper;
-    Student studentToRemove;
     HashMap<String, List<String>> studentListHashMap = new HashMap<>();
 
     @Override
@@ -50,28 +50,20 @@ public class StudentListActivity extends AppCompatActivity
         listAdapter = new Master2Detail2(this, studentNames, studentListHashMap);
         masterDetail.setAdapter(listAdapter);
 
-        // Listview Group click listener
-        masterDetail.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
-        {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
-            {
-                String fullName = studentNames.get(groupPosition);
-                String surName = fullName.substring(0, fullName.indexOf("\t"));
-                String name = fullName.substring(fullName.indexOf("\t") + 1, fullName.length());
-
-                studentToRemove = dbHelper.getStudent(name, surName);
-                return false;
-            }
-        });
-
         masterDetail.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
         {
             @Override
             public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long l)
             {
-                //Toast.makeText(getApplicationContext(), studentListHashMap.get(studentNames.get(groupPosition)).get(childPosition),
-                        //Toast.LENGTH_SHORT).show();
+                String fullName = studentNames.get(groupPosition);
+                String s = studentListHashMap.get(fullName).get(0);
+                //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                String studentRegister = s.substring(s.indexOf("\t") + 1, s.length());
+                Guardian guardian = dbHelper.getGuardian(studentRegister);
+
+                Intent intent = new Intent(getApplicationContext(), GuardianInfoActivity.class);
+                intent.putExtra("guardian", guardian);
+                startActivity(intent);
                 return false;
             }
         });
@@ -131,13 +123,17 @@ public class StudentListActivity extends AppCompatActivity
                     builder.setMessage(R.string.stu_message2);
 
                     final String key = studentNames.get(groupPosition);
+                    //Toast.makeText(StudentListActivity.this, key, Toast.LENGTH_SHORT).show();
                     String value = studentListHashMap.get(key).get(childPosition);
                     String detail1 = value.substring(0, value.indexOf("\t"));
                     String detail2 = value.substring(value.indexOf("\t") + 1, value.length());
                     etDetail1.setText(detail1);
                     etDetail1.setEnabled(false);
                     etDetail2.setText(detail2);
-                    // Add the buttons
+
+                    ArrayList<String> details = (ArrayList<String>) studentListHashMap.get(key);
+                    final String s = details.get(0);
+
                     builder.setPositiveButton(R.string.stu_ok, new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface dialog, int id)
@@ -148,7 +144,32 @@ public class StudentListActivity extends AppCompatActivity
                             studentListHashMap.get(key).set(childPosition, value);
                             listAdapter.notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), "Сонгосон мэдээлэл өөрчлөгдлөө", Toast.LENGTH_SHORT).show();
-                            //dbHelper.removeItem(itemName);
+
+                            String filter = s.substring(s.indexOf("\t") + 1, s.length());
+                            ContentValues args = new ContentValues();
+
+                            switch(childPosition)
+                            {
+                                case 0:
+                                    args.put("register", detail2);
+                                    break;
+                                case 1:
+                                    args.put("phone_number", detail2);
+                                    break;
+                                case 2:
+                                    args.put("email", detail2);
+                                    break;
+                                case 3:
+                                    args.put("address", detail2);
+                                    break;
+                                case 4:
+                                    args.put("enrolled_year", detail2);
+                                    break;
+                                case 5:
+                                    args.put("gender", detail2);
+                                    break;
+                            }
+                            dbHelper.updateStudent(filter, args);
                         }
                     });
                     builder.setNegativeButton(R.string.stu_cancel, new DialogInterface.OnClickListener()
@@ -178,7 +199,6 @@ public class StudentListActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
 
     public static int ordinalIndexOf(String str, String substr, int n)
     {

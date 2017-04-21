@@ -38,7 +38,8 @@
         <activity android:name=".SubjectListActivity" />
         <activity android:name=".ScheduleActivity" />
         <activity android:name=".MarkActivity" />
-        <activity android:name=".BackupRestoreActivity"></activity>
+        <activity android:name=".BackupRestoreActivity" />
+        <activity android:name=".GuardianInfoActivity"></activity>
     </application>
 
 </manifest>

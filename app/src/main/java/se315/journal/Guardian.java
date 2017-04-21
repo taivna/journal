@@ -3,7 +3,9 @@ package se315.journal;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 
-public class Guardian
+import java.io.Serializable;
+
+public class Guardian implements Serializable
 {
     String register, name, surName, phoneNumber, eMail, relation, studentRegister;
 

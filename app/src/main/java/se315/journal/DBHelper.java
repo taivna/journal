@@ -234,6 +234,9 @@ public class DBHelper extends SQLiteOpenHelper
         SQLiteDatabase db = this. getWritableDatabase();
         db.delete(STUDENT_TABLE, COLUMN_REGISTER + " =?", new String[] {student.getRegister()});
         db.delete(GUARDIAN_TABLE, COLUMN_STUDENT_REGISTER + " =?", new String[] {student.getRegister()});
+        db.delete(ATTENDANCE_TABLE, COLUMN_SURNAME + " =?" + " AND " + COLUMN_NAME + " =?",
+                new String[]{student.getSurName(), student.getName()});
+        db.delete(MARK_TABLE, COLUMN_STUDENT_REGISTER + " =?", new String[]{student.getRegister()});
         db.close();
     }
 
@@ -328,7 +331,6 @@ public class DBHelper extends SQLiteOpenHelper
 
     public ArrayList<String> getStudentDetails(Student student)
     {
-        SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> studentDetails = new ArrayList<>();
 
         studentDetails.add("Регистрийн дугаар:\t" + student.getRegister());
@@ -338,19 +340,6 @@ public class DBHelper extends SQLiteOpenHelper
         studentDetails.add("Элссэн огноо:\t" + String.valueOf(student.getEndrolledYear()));
         studentDetails.add("Хүйс:\t" + student.getGender());
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + GUARDIAN_TABLE + " WHERE " + COLUMN_STUDENT_REGISTER + " = ?",
-                new String[] {student.getRegister()});
-
-        if(cursor.moveToFirst())
-        {
-            studentDetails.add("Асран хамгаалагч:\t" + cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)) +
-            " , " + cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-            studentDetails.add("Утасны дугаар:\t" + cursor.getString(cursor.getColumnIndex(COLUMN_PHONE_NUMBER)));
-            studentDetails.add("И-мэйл:\t" + cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
-            studentDetails.add("Сурагчийн юу  нь болох:\t" + cursor.getString(cursor.getColumnIndex(COLUMN_RELATION)));
-        }
-        cursor.close();
-        db.close();
         return studentDetails;
     }
 
@@ -874,6 +863,75 @@ public class DBHelper extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(MARK_TABLE, COLUMN_ITEM_ID + " =?", new String[] {String.valueOf(item.getId())});
+        db.close();
+    }
+
+    public boolean studentExists(Student student)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + STUDENT_TABLE + " WHERE " + COLUMN_REGISTER + " =?",
+                new String[] {student.getRegister()});
+
+        if(cursor.moveToFirst())
+        {
+            cursor.close();
+            db.close();
+            return true;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return false;
+        }
+    }
+
+    public void updateStudent(String filter, ContentValues args)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(STUDENT_TABLE, args, "register=?", new String[]{filter});
+        db.close();
+    }
+
+    public Guardian getGuardian(String studentRegister)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Guardian guardian = new Guardian();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + GUARDIAN_TABLE + " WHERE " + COLUMN_STUDENT_REGISTER + " =?",
+                new String[] {studentRegister});
+
+        if(cursor .moveToFirst())
+        {
+            guardian.setRegister(cursor.getString(cursor.getColumnIndex(COLUMN_REGISTER)));
+            guardian.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            guardian.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+            guardian.setPhoneNumber(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE_NUMBER)));
+            guardian.setEMail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
+            guardian.setRelation(cursor.getString(cursor.getColumnIndex(COLUMN_RELATION)));
+            guardian.setStudentRegister(cursor.getString(cursor.getColumnIndex(COLUMN_STUDENT_REGISTER)));
+        }
+        cursor.close();
+        db.close();
+        return guardian;
+    }
+
+    public ArrayList<String> getGuardianDetails(Guardian guardian)
+    {
+        ArrayList<String> guardianDetails = new ArrayList<>();
+
+        guardianDetails.add("Утасны дугаар:\t" + guardian.getPhoneNumber());
+        guardianDetails.add("И-мэйл:\t" + guardian.getEMail());
+        guardianDetails.add("Регистрийн дугаар:\t" + guardian.getRegister());
+        guardianDetails.add("Сурагчийн юу нь болох:\t" + guardian.getRelation());
+
+        return guardianDetails;
+    }
+
+    public void updateGuardian(String filter, ContentValues args)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(GUARDIAN_TABLE, args, "register=?", new String[]{filter});
         db.close();
     }
 }

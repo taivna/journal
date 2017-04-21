@@ -53,10 +53,12 @@ public class GuardianAddActivity extends AppCompatActivity
         guardian.setRegister(register.getText().toString());
         guardian.setStudentRegister(studentRegister.getText().toString());
 
-        dbHelper.addGuardian(guardian);
-        dbHelper.addStudent(student);
-        Toast.makeText(getApplicationContext(), "Шинэ сурагч бүртгэлд нэмэгдлээ",
-                Toast.LENGTH_SHORT).show();
+        if(!dbHelper.studentExists(student))
+        {
+            dbHelper.addGuardian(guardian);
+            dbHelper.addStudent(student);
+            Toast.makeText(getApplicationContext(), "Шинэ сурагч бүртгэлд нэмэгдлээ", Toast.LENGTH_SHORT).show();
+        }
         finish();
     }
 }
