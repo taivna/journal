@@ -1,9 +1,11 @@
 package se315.journal;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -226,7 +228,8 @@ public class AttendanceActivity extends AppCompatActivity
             tvDate.setText(date);
             loadAttendance(date);
             saveBtn.setEnabled(false);
-            disableRadrioGroup();
+            saveBtn.setBackgroundColor(Color.GRAY);
+            disableRadioGroup();
         }
     }
 
@@ -249,11 +252,12 @@ public class AttendanceActivity extends AppCompatActivity
             tvDate.setText(date);
             loadAttendance(date);
             saveBtn.setEnabled(true);
-            enableRadrioGroup();
+            saveBtn.setBackgroundColor(getThemeColor());
+            enableRadioGroup();
         }
     }
 
-    public void disableRadrioGroup()
+    public void disableRadioGroup()
     {
         for (int i = 0; i < radioGroup.getChildCount(); i++)
         {
@@ -261,7 +265,7 @@ public class AttendanceActivity extends AppCompatActivity
         }
     }
 
-    public void enableRadrioGroup()
+    public void enableRadioGroup()
     {
         for (int i = 0; i < radioGroup.getChildCount(); i++)
         {
@@ -275,5 +279,13 @@ public class AttendanceActivity extends AppCompatActivity
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String formattedDate = dateFormat.format(calendar.getTime());
         return formattedDate;
+    }
+
+    public int getThemeColor()
+    {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int color = typedValue.data;
+        return color;
     }
 }
