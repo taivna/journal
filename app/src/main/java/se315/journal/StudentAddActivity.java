@@ -195,39 +195,31 @@ public class StudentAddActivity extends AppCompatActivity
         boolean enabled = true;
 
         if(name.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(surName.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(phoneNumber.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(eMail.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(address.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(register.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
+
 
         if(enrolledYear.getText().toString().length() == 0)
-        {
             enabled = false;
-        }
 
         if(enabled)
         {

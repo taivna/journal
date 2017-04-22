@@ -1,8 +1,12 @@
 package se315.journal;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -59,6 +63,69 @@ public class SubjectAddActivity extends AppCompatActivity
 
         subjectAdapter.setDropDownViewResource(R.layout.my_spinner_dropdown_item);
         subjectSpinner.setAdapter(subjectAdapter);
+
+        saveSubject.setEnabled(false);
+        saveSubject.setBackgroundColor(Color.GRAY);
+
+        saveItem.setEnabled(false);
+        saveItem.setBackgroundColor(Color.GRAY);
+
+        subjectName.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                enableSaveSubject();
+            }
+        });
+
+        itemName.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                enableSaveItem();
+            }
+        });
+
+        mark.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                enableSaveItem();
+            }
+        });
     }
 
     public void switchToSubjectList(View view)
@@ -89,5 +156,53 @@ public class SubjectAddActivity extends AppCompatActivity
         dbHelper.addItem(item);
         itemName.setText("");
         Toast.makeText(getApplicationContext(), "Шинэ " + item.getTypeName() + " бүртгэлд нэмэгдлээ", Toast.LENGTH_SHORT).show();
+    }
+
+    public int getThemeColor()
+    {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int color = typedValue.data;
+        return color;
+    }
+
+    public void enableSaveSubject()
+    {
+        boolean enabled = true;
+
+        if(subjectName.getText().toString().length() == 0)
+            enabled = false;
+
+        if(enabled)
+        {
+            saveSubject.setEnabled(true);
+            saveSubject.setBackgroundColor(getThemeColor());
+        }
+        else
+        {
+            saveSubject.setEnabled(false);
+            saveSubject.setBackgroundColor(Color.GRAY);
+        }
+    }
+
+    public void enableSaveItem()
+    {
+        boolean enabled = true;
+
+        if(itemName.getText().toString().length() == 0)
+            enabled = false;
+        if(mark.getText().toString().length() == 0)
+            enabled = false;
+
+        if(enabled)
+        {
+            saveItem.setEnabled(true);
+            saveItem.setBackgroundColor(getThemeColor());
+        }
+        else
+        {
+            saveItem.setEnabled(false);
+            saveItem.setBackgroundColor(Color.GRAY);
+        }
     }
 }

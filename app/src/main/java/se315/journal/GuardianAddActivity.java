@@ -262,6 +262,5 @@ public class GuardianAddActivity extends AppCompatActivity
             saveBtn.setEnabled(false);
             saveBtn.setBackgroundColor(Color.GRAY);
         }
-
     }
 }
