@@ -420,33 +420,6 @@ public class DBHelper extends SQLiteOpenHelper
         return subjectItems;
     }
 
-    public ArrayList<Item> getSubjectItems(String name)
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Item> subjectItems = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE " + COLUMN_SUBJECT_NAME + " =?",
-                new String[] {name});
-
-        if(cursor .moveToFirst())
-        {
-            while(!cursor.isAfterLast())
-            {
-                Item item = new Item();
-                item.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-                item.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-                item.setSubjectName(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
-                item.setTypeName(cursor.getString(cursor.getColumnIndex(COLUMN_TYPE)));
-                item.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
-                subjectItems.add(item);
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        db.close();
-        return subjectItems;
-    }
-
     public boolean isTableEmpty(String tableName)
     {
         SQLiteDatabase  db = this.getWritableDatabase();
@@ -651,7 +624,6 @@ public class DBHelper extends SQLiteOpenHelper
 
         db.delete(ATTENDANCE_TABLE, COLUMN_DATE + " =? AND " + COLUMN_SURNAME + " =? AND " + COLUMN_NAME + " =? AND " + COLUMN_TERM + " =?",
                     new String[] {attendance.getDate(), attendance.getSurName(), attendance.getName(), String.valueOf(attendance.getTerm())});
-
         db.close();
     }
 
@@ -678,13 +650,8 @@ public class DBHelper extends SQLiteOpenHelper
 
     public void removeSubject(String name)
     {
-        ArrayList<Item> items = getSubjectItems(name);
-        for(Item item: items)
-        {
-            SQLiteDatabase db = this. getWritableDatabase();
-            db.delete(ITEM_TABLE, COLUMN_SUBJECT_NAME + " =?", new String[] {name});
-        }
         SQLiteDatabase db = this. getWritableDatabase();
+        db.delete(ITEM_TABLE, COLUMN_SUBJECT_NAME + " =?", new String[] {name});
         db.delete(SUBJECT_TABLE, COLUMN_NAME + " =?", new String[] {name});
         db.close();
     }
@@ -933,5 +900,28 @@ public class DBHelper extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(GUARDIAN_TABLE, args, "register=?", new String[]{filter});
         db.close();
+    }
+
+    public ArrayList<String> getDates()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> dates = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE, null);
+
+        if(cursor.moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                String date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+
+                if(!dates.contains(date))
+                    dates.add(date);
+
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return dates;
     }
 }

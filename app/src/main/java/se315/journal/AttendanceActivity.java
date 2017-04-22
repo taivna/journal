@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,17 +15,19 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class AttendanceActivity extends AppCompatActivity
 {
-    int term;
+    Button saveBtn;
+    int term,day, index;
     TextView tvDate;
     DBHelper dbHelper;
     RadioGroup radioGroup;
     RadioButton radioButton;
-    ArrayList<String> terms;
+    ArrayList<String> terms, dates;
     Master2Detail3 listAdapter;
     ExpandableListView listView;
     ArrayList<Student> students;
@@ -39,6 +42,7 @@ public class AttendanceActivity extends AppCompatActivity
         setContentView(R.layout.activity_attendance);
         getSupportActionBar().setTitle(R.string.att_title);
 
+        saveBtn = (Button) findViewById(R.id.att_btn_save);
         tvDate = (TextView) findViewById(R.id.att_tv_date);
         radioGroup = (RadioGroup) findViewById(R.id.att_radiogroup);
         radioButton = new RadioButton(this);
@@ -46,18 +50,17 @@ public class AttendanceActivity extends AppCompatActivity
         listView = (ExpandableListView) findViewById(R.id.att_exp_lv);
         dbHelper = new DBHelper(this);
 
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        terms = dbHelper.getTerms(day);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = dateFormat.format(calendar.getTime());
+        String formattedDate = getCurrentDate();
         tvDate.setText(formattedDate);
 
-        loadAttendance(formattedDate);
+        Calendar calendar = Calendar.getInstance();
+        day = calendar.get(Calendar.DAY_OF_WEEK);
+        terms = dbHelper.getTerms(day);
+        dates = dbHelper.getDates();
+        index = dates.size();
+        Collections.sort(dates);
 
-        listAdapter = new Master2Detail3(this, terms, attendanceHashMap);
-        listView.setAdapter(listAdapter);
+        loadAttendance(formattedDate);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
         {
@@ -208,5 +211,69 @@ public class AttendanceActivity extends AppCompatActivity
                 attendanceNew.add(attendance);
             attendanceOld.clear();
         }
+        listAdapter = new Master2Detail3(this, terms, attendanceHashMap);
+        listView.setAdapter(listAdapter);
+    }
+
+    public void previous(View view)
+    {
+        if(index > 0)
+        {
+            index--;
+            day--;
+            terms = dbHelper.getTerms(day);
+            String date = dates.get(index);
+            tvDate.setText(date);
+            loadAttendance(date);
+            saveBtn.setEnabled(false);
+            disableRadrioGroup();
+        }
+    }
+
+    public void next(View view)
+    {
+        if(index < dates.size() - 1)
+        {
+            index++;
+            day++;
+            terms = dbHelper.getTerms(day);
+            String date = dates.get(index);
+            tvDate.setText(date);
+            loadAttendance(date);
+        }
+        else
+        {
+            day++;
+            terms = dbHelper.getTerms(day);
+            String date = getCurrentDate();
+            tvDate.setText(date);
+            loadAttendance(date);
+            saveBtn.setEnabled(true);
+            enableRadrioGroup();
+        }
+    }
+
+    public void disableRadrioGroup()
+    {
+        for (int i = 0; i < radioGroup.getChildCount(); i++)
+        {
+            radioGroup.getChildAt(i).setEnabled(false);
+        }
+    }
+
+    public void enableRadrioGroup()
+    {
+        for (int i = 0; i < radioGroup.getChildCount(); i++)
+        {
+            radioGroup.getChildAt(i).setEnabled(true);
+        }
+    }
+
+    public String getCurrentDate()
+    {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(calendar.getTime());
+        return formattedDate;
     }
 }
