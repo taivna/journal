@@ -107,6 +107,7 @@
     <string name="gi_dialog_message">Шинэ утга оруулна уу</string>
     <string name="gi_ok_btn">Баталгаажуулах</string>
     <string name="gi_cancel_btn">Болих</string>
+    <string name="gi_back_btn">Буцах</string>
 
     <string-array name="item_type_array">
         <item>Даалгавар</item>

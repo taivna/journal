@@ -14,10 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,13 +57,21 @@ public class AttendanceActivity extends AppCompatActivity
         String formattedDate = getCurrentDate();
         tvDate.setText(formattedDate);
 
-        Calendar calendar = Calendar.getInstance();
-        day = calendar.get(Calendar.DAY_OF_WEEK);
+        //Calendar calendar = Calendar.getInstance();
+        day = getDayOfWeek(formattedDate);
         terms = dbHelper.getTerms(day);
         dates = dbHelper.getDates();
         index = dates.size();
         Collections.sort(dates);
 
+        String toPrint = "";
+
+        for(String date: dates)
+        {
+            toPrint += date + "\n";
+        }
+
+        Toast.makeText(this, toPrint, Toast.LENGTH_SHORT).show();
         loadAttendance(formattedDate);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -222,11 +232,11 @@ public class AttendanceActivity extends AppCompatActivity
         if(index > 0)
         {
             index--;
-            day--;
-            terms = dbHelper.getTerms(day);
-            String date = dates.get(index);
-            tvDate.setText(date);
-            loadAttendance(date);
+            String olderDate = dates.get(index);
+            int dayOfWeek = getDayOfWeek(olderDate);
+            terms = dbHelper.getTerms(dayOfWeek);
+            tvDate.setText(olderDate);
+            loadAttendance(olderDate);
             saveBtn.setEnabled(false);
             saveBtn.setBackgroundColor(Color.GRAY);
             disableRadioGroup();
@@ -238,15 +248,14 @@ public class AttendanceActivity extends AppCompatActivity
         if(index < dates.size() - 1)
         {
             index++;
-            day++;
-            terms = dbHelper.getTerms(day);
-            String date = dates.get(index);
-            tvDate.setText(date);
-            loadAttendance(date);
+            String newerDate = dates.get(index);
+            int dayOfWeek = getDayOfWeek(newerDate);
+            terms = dbHelper.getTerms(dayOfWeek);
+            tvDate.setText(newerDate);
+            loadAttendance(newerDate);
         }
         else
         {
-            day++;
             terms = dbHelper.getTerms(day);
             String date = getCurrentDate();
             tvDate.setText(date);
@@ -287,5 +296,68 @@ public class AttendanceActivity extends AppCompatActivity
         getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int color = typedValue.data;
         return color;
+    }
+
+    public int getDayDifferenceCount(String older, String newer)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date olderDate = null, newerDate = null;
+        try
+        {
+            olderDate = dateFormat.parse(older);
+            newerDate = dateFormat.parse(newer);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Calendar c_cal = Calendar.getInstance();
+        c_cal.setTime(olderDate);
+        int c_year = c_cal.get(Calendar.YEAR);
+        int c_month = c_cal.get(Calendar.MONTH);
+        int c_day = c_cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar date1 = Calendar.getInstance();
+        date1.clear();
+        date1.set(c_year, c_month, c_day);
+
+        Calendar e_cal = Calendar.getInstance();
+        e_cal.setTime(newerDate);
+
+        int e_year = e_cal.get(Calendar.YEAR);
+        int e_month = e_cal.get(Calendar.MONTH);
+        int e_day = e_cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar date2 = Calendar.getInstance();
+        date2.clear();
+        date2.set(e_year, e_month, e_day);
+
+        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
+
+        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+
+        return (int) dayCount;
+    }
+
+    public int getDayOfWeek(String date)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date oldDate = null;
+
+        try
+        {
+            oldDate = dateFormat.parse(date);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(oldDate);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
     }
 }

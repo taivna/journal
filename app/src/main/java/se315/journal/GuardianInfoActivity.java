@@ -2,6 +2,7 @@ package se315.journal;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -105,5 +106,11 @@ public class GuardianInfoActivity extends AppCompatActivity
                 return false;
             }
         });
+    }
+
+    public void switchToStudentList(View view)
+    {
+        Intent intent = new Intent(this, StudentListActivity.class);
+        startActivity(intent);
     }
 }
