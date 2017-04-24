@@ -25,7 +25,7 @@ import java.util.List;
 
 public class AttendanceActivity extends AppCompatActivity
 {
-    Button saveBtn;
+    Button saveBtn, prevBtn;
     int term,day, index;
     TextView tvDate;
     DBHelper dbHelper;
@@ -47,6 +47,7 @@ public class AttendanceActivity extends AppCompatActivity
         getSupportActionBar().setTitle(R.string.att_title);
 
         saveBtn = (Button) findViewById(R.id.att_btn_save);
+        prevBtn = (Button) findViewById(R.id.att_btn_prev);
         tvDate = (TextView) findViewById(R.id.att_tv_date);
         radioGroup = (RadioGroup) findViewById(R.id.att_radiogroup);
         radioButton = new RadioButton(this);
@@ -60,9 +61,15 @@ public class AttendanceActivity extends AppCompatActivity
         tvDate.setText(formattedDate + "\n" + dayOfWeek);
         terms = dbHelper.getTerms(day);
         dates = dbHelper.getDates();
-        index = dates.size();
-        Collections.sort(dates);
 
+        if(dates.size() > 0)
+        index = dates.size();
+
+        else
+            disableButton(prevBtn);
+
+
+        Collections.sort(dates);
         loadAttendance(formattedDate);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -229,14 +236,14 @@ public class AttendanceActivity extends AppCompatActivity
 
             if(olderDate.equals(currentDate))
             {
-                index--;
+                //index--;
                 String oldDate = dates.get(index);
                 int dayOfWeek = getDayOfWeek(oldDate);
                 terms = dbHelper.getTerms(dayOfWeek);
                 String day = getDayOfWeek(dayOfWeek);
                 tvDate.setText(oldDate + "\n" + day);
                 loadAttendance(oldDate);
-                disableSaveButton();
+                enableButton(saveBtn);
             }
             else
             {
@@ -245,7 +252,7 @@ public class AttendanceActivity extends AppCompatActivity
                 String day = getDayOfWeek(dayOfWeek);
                 tvDate.setText(olderDate + "\n" + day);
                 loadAttendance(olderDate);
-                disableSaveButton();
+                disableButton(saveBtn);
             }
         }
         else
@@ -256,7 +263,8 @@ public class AttendanceActivity extends AppCompatActivity
             String day = getDayOfWeek(dayOfWeek);
             tvDate.setText(olderDate + "\n" + day);
             loadAttendance(olderDate);
-            disableSaveButton();
+            disableButton(saveBtn);
+            disableButton(prevBtn);
         }
     }
 
@@ -275,7 +283,7 @@ public class AttendanceActivity extends AppCompatActivity
             loadAttendance(newerDate);
 
             if(newerDate.equals(currentDate))
-                enableSaveButton();
+                enableButton(saveBtn);
         }
         else
         {
@@ -283,7 +291,8 @@ public class AttendanceActivity extends AppCompatActivity
             String dayOfWeek = getDayOfWeek(day);
             tvDate.setText(currentDate + "\n" + dayOfWeek);
             loadAttendance(currentDate);
-            enableSaveButton();
+            enableButton(saveBtn);
+            enableButton(prevBtn);
         }
     }
 
@@ -413,17 +422,17 @@ public class AttendanceActivity extends AppCompatActivity
         return dayOfWeek;
     }
 
-    public void enableSaveButton()
+    public void enableButton(Button button)
     {
-        saveBtn.setEnabled(true);
-        saveBtn.setBackgroundColor(getThemeColor());
+        button.setEnabled(true);
+        button.setBackgroundColor(getThemeColor());
         enableRadioGroup();
     }
 
-    public void disableSaveButton()
+    public void disableButton(Button button)
     {
-        saveBtn.setEnabled(false);
-        saveBtn.setBackgroundColor(Color.GRAY);
+        button.setEnabled(false);
+        button.setBackgroundColor(Color.GRAY);
         disableRadioGroup();
     }
 }
