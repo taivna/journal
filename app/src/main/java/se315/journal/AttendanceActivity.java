@@ -241,6 +241,17 @@ public class AttendanceActivity extends AppCompatActivity
             saveBtn.setBackgroundColor(Color.GRAY);
             disableRadioGroup();
         }
+        else
+        {
+            String olderDate = dates.get(index);
+            int dayOfWeek = getDayOfWeek(olderDate);
+            terms = dbHelper.getTerms(dayOfWeek);
+            tvDate.setText(olderDate);
+            loadAttendance(olderDate);
+            saveBtn.setEnabled(false);
+            saveBtn.setBackgroundColor(Color.GRAY);
+            disableRadioGroup();
+        }
     }
 
     public void next(View view)
