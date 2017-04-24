@@ -57,21 +57,12 @@ public class AttendanceActivity extends AppCompatActivity
         String formattedDate = getCurrentDate();
         tvDate.setText(formattedDate);
 
-        //Calendar calendar = Calendar.getInstance();
         day = getDayOfWeek(formattedDate);
         terms = dbHelper.getTerms(day);
         dates = dbHelper.getDates();
         index = dates.size();
         Collections.sort(dates);
 
-        String toPrint = "";
-
-        for(String date: dates)
-        {
-            toPrint += date + "\n";
-        }
-
-        Toast.makeText(this, toPrint, Toast.LENGTH_SHORT).show();
         loadAttendance(formattedDate);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -229,17 +220,31 @@ public class AttendanceActivity extends AppCompatActivity
 
     public void previous(View view)
     {
+        String currentDate = getCurrentDate();
+
         if(index > 0)
         {
             index--;
             String olderDate = dates.get(index);
-            int dayOfWeek = getDayOfWeek(olderDate);
-            terms = dbHelper.getTerms(dayOfWeek);
-            tvDate.setText(olderDate);
-            loadAttendance(olderDate);
-            saveBtn.setEnabled(false);
-            saveBtn.setBackgroundColor(Color.GRAY);
-            disableRadioGroup();
+
+            if(olderDate.equals(currentDate))
+            {
+                index--;
+                String oldDate = dates.get(index);
+                int dayOfWeek = getDayOfWeek(oldDate);
+                terms = dbHelper.getTerms(dayOfWeek);
+                tvDate.setText(oldDate);
+                loadAttendance(oldDate);
+                disableSaveButton();
+            }
+            else
+            {
+                int dayOfWeek = getDayOfWeek(olderDate);
+                terms = dbHelper.getTerms(dayOfWeek);
+                tvDate.setText(olderDate);
+                loadAttendance(olderDate);
+                disableSaveButton();
+            }
         }
         else
         {
@@ -248,14 +253,14 @@ public class AttendanceActivity extends AppCompatActivity
             terms = dbHelper.getTerms(dayOfWeek);
             tvDate.setText(olderDate);
             loadAttendance(olderDate);
-            saveBtn.setEnabled(false);
-            saveBtn.setBackgroundColor(Color.GRAY);
-            disableRadioGroup();
+            disableSaveButton();
         }
     }
 
     public void next(View view)
     {
+        String currentDate = getCurrentDate();
+
         if(index < dates.size() - 1)
         {
             index++;
@@ -264,16 +269,16 @@ public class AttendanceActivity extends AppCompatActivity
             terms = dbHelper.getTerms(dayOfWeek);
             tvDate.setText(newerDate);
             loadAttendance(newerDate);
+
+            if(newerDate.equals(currentDate))
+                enableSaveButton();
         }
         else
         {
             terms = dbHelper.getTerms(day);
-            String date = getCurrentDate();
-            tvDate.setText(date);
-            loadAttendance(date);
-            saveBtn.setEnabled(true);
-            saveBtn.setBackgroundColor(getThemeColor());
-            enableRadioGroup();
+            tvDate.setText(currentDate);
+            loadAttendance(currentDate);
+            enableSaveButton();
         }
     }
 
@@ -370,5 +375,19 @@ public class AttendanceActivity extends AppCompatActivity
         calendar.setTime(oldDate);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         return dayOfWeek;
+    }
+
+    public void enableSaveButton()
+    {
+        saveBtn.setEnabled(true);
+        saveBtn.setBackgroundColor(getThemeColor());
+        enableRadioGroup();
+    }
+
+    public void disableSaveButton()
+    {
+        saveBtn.setEnabled(false);
+        saveBtn.setBackgroundColor(Color.GRAY);
+        disableRadioGroup();
     }
 }
