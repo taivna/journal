@@ -25,7 +25,6 @@ import java.util.List;
 
 public class AttendanceActivity extends AppCompatActivity
 {
-    Button saveBtn, prevBtn;
     int term,day, index;
     TextView tvDate;
     DBHelper dbHelper;
@@ -35,6 +34,7 @@ public class AttendanceActivity extends AppCompatActivity
     Master2Detail3 listAdapter;
     ExpandableListView listView;
     ArrayList<Student> students;
+    Button saveBtn, prevBtn, nextBtn;
     String s, subjectName, surName, name, state;
     ArrayList<Attendance> attendanceOld, attendanceNew;
     HashMap<String, List<String>> attendanceHashMap = new HashMap();
@@ -48,6 +48,7 @@ public class AttendanceActivity extends AppCompatActivity
 
         saveBtn = (Button) findViewById(R.id.att_btn_save);
         prevBtn = (Button) findViewById(R.id.att_btn_prev);
+        nextBtn = (Button) findViewById(R.id.att_btn_next);
         tvDate = (TextView) findViewById(R.id.att_tv_date);
         radioGroup = (RadioGroup) findViewById(R.id.att_radiogroup);
         radioButton = new RadioButton(this);
@@ -63,10 +64,10 @@ public class AttendanceActivity extends AppCompatActivity
         dates = dbHelper.getDates();
 
         if(dates.size() > 0)
-        index = dates.size();
+            index = dates.size();
 
-        else
-            disableButton(prevBtn);
+        if(dates.get(index - 1).equals(formattedDate))
+            disableButton(nextBtn);
 
 
         Collections.sort(dates);
@@ -236,14 +237,16 @@ public class AttendanceActivity extends AppCompatActivity
 
             if(olderDate.equals(currentDate))
             {
-                //index--;
-                String oldDate = dates.get(index);
-                int dayOfWeek = getDayOfWeek(oldDate);
-                terms = dbHelper.getTerms(dayOfWeek);
-                String day = getDayOfWeek(dayOfWeek);
-                tvDate.setText(oldDate + "\n" + day);
-                loadAttendance(oldDate);
+                //String oldDate = dates.get(index);
+                //int dayOfWeek = getDayOfWeek(oldDate);
+                //terms = dbHelper.getTerms(dayOfWeek);
+                //String day = getDayOfWeek(dayOfWeek);
+                //tvDate.setText(oldDate + "\n" + day);
+                //loadAttendance(oldDate);
                 enableButton(saveBtn);
+                disableButton(nextBtn);
+                enableButton(prevBtn);
+                enableRadioGroup();
             }
             else
             {
@@ -253,6 +256,9 @@ public class AttendanceActivity extends AppCompatActivity
                 tvDate.setText(olderDate + "\n" + day);
                 loadAttendance(olderDate);
                 disableButton(saveBtn);
+                disableButton(prevBtn);
+                enableButton(nextBtn);
+                disableRadioGroup();
             }
         }
         else
@@ -265,6 +271,8 @@ public class AttendanceActivity extends AppCompatActivity
             loadAttendance(olderDate);
             disableButton(saveBtn);
             disableButton(prevBtn);
+            enableButton(nextBtn);
+            disableRadioGroup();
         }
     }
 
@@ -283,7 +291,12 @@ public class AttendanceActivity extends AppCompatActivity
             loadAttendance(newerDate);
 
             if(newerDate.equals(currentDate))
+            {
+                enableButton(prevBtn);
+                disableButton(nextBtn);
                 enableButton(saveBtn);
+                enableRadioGroup();
+            }
         }
         else
         {
@@ -293,6 +306,8 @@ public class AttendanceActivity extends AppCompatActivity
             loadAttendance(currentDate);
             enableButton(saveBtn);
             enableButton(prevBtn);
+            disableButton(nextBtn);
+            enableRadioGroup();
         }
     }
 
@@ -426,13 +441,11 @@ public class AttendanceActivity extends AppCompatActivity
     {
         button.setEnabled(true);
         button.setBackgroundColor(getThemeColor());
-        enableRadioGroup();
     }
 
     public void disableButton(Button button)
     {
         button.setEnabled(false);
         button.setBackgroundColor(Color.GRAY);
-        disableRadioGroup();
     }
 }
