@@ -55,9 +55,9 @@ public class AttendanceActivity extends AppCompatActivity
         dbHelper = new DBHelper(this);
 
         String formattedDate = getCurrentDate();
-        tvDate.setText(formattedDate);
-
         day = getDayOfWeek(formattedDate);
+        String dayOfWeek = getDayOfWeek(day);
+        tvDate.setText(formattedDate + "\n" + dayOfWeek);
         terms = dbHelper.getTerms(day);
         dates = dbHelper.getDates();
         index = dates.size();
@@ -233,7 +233,8 @@ public class AttendanceActivity extends AppCompatActivity
                 String oldDate = dates.get(index);
                 int dayOfWeek = getDayOfWeek(oldDate);
                 terms = dbHelper.getTerms(dayOfWeek);
-                tvDate.setText(oldDate);
+                String day = getDayOfWeek(dayOfWeek);
+                tvDate.setText(oldDate + "\n" + day);
                 loadAttendance(oldDate);
                 disableSaveButton();
             }
@@ -241,7 +242,8 @@ public class AttendanceActivity extends AppCompatActivity
             {
                 int dayOfWeek = getDayOfWeek(olderDate);
                 terms = dbHelper.getTerms(dayOfWeek);
-                tvDate.setText(olderDate);
+                String day = getDayOfWeek(dayOfWeek);
+                tvDate.setText(olderDate + "\n" + day);
                 loadAttendance(olderDate);
                 disableSaveButton();
             }
@@ -251,7 +253,8 @@ public class AttendanceActivity extends AppCompatActivity
             String olderDate = dates.get(index);
             int dayOfWeek = getDayOfWeek(olderDate);
             terms = dbHelper.getTerms(dayOfWeek);
-            tvDate.setText(olderDate);
+            String day = getDayOfWeek(dayOfWeek);
+            tvDate.setText(olderDate + "\n" + day);
             loadAttendance(olderDate);
             disableSaveButton();
         }
@@ -267,7 +270,8 @@ public class AttendanceActivity extends AppCompatActivity
             String newerDate = dates.get(index);
             int dayOfWeek = getDayOfWeek(newerDate);
             terms = dbHelper.getTerms(dayOfWeek);
-            tvDate.setText(newerDate);
+            String day = getDayOfWeek(dayOfWeek);
+            tvDate.setText(newerDate + "\n" + day);
             loadAttendance(newerDate);
 
             if(newerDate.equals(currentDate))
@@ -276,7 +280,8 @@ public class AttendanceActivity extends AppCompatActivity
         else
         {
             terms = dbHelper.getTerms(day);
-            tvDate.setText(currentDate);
+            String dayOfWeek = getDayOfWeek(day);
+            tvDate.setText(currentDate + "\n" + dayOfWeek);
             loadAttendance(currentDate);
             enableSaveButton();
         }
@@ -374,6 +379,37 @@ public class AttendanceActivity extends AppCompatActivity
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(oldDate);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
+    }
+
+    public String getDayOfWeek(int day)
+    {
+        String dayOfWeek = null;
+
+        switch(day)
+        {
+            case Calendar.MONDAY:
+                dayOfWeek = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                dayOfWeek = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                dayOfWeek = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                dayOfWeek = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                dayOfWeek = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                dayOfWeek = "Saturday";
+                break;
+            case Calendar.SUNDAY:
+                dayOfWeek = "Sunday";
+                break;
+        }
         return dayOfWeek;
     }
 
