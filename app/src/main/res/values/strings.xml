@@ -18,7 +18,7 @@
     <string name="main_btn_scores">Дүн бүртгэл</string>
     <string name="main_btn_attendance">Ирц бүртгэл</string>
 
-    <string name="stu_title">Сурагчдийн жагсаалт</string>
+    <string name="stu_title">Сурагчид</string>
     <string name="stu_btn_back">Буцах</string>
     <string name="stu_btn_add">Нэмэх</string>
     <string name="stu_tv_ln">Овог</string>
@@ -64,7 +64,7 @@
     <string name="addsbj_btn_back">Буцах</string>
     <string name="addsbj_btn_confirm">Хадгалах</string>
 
-    <string name="sbjlist_title">Хичээлийн жагсаалт</string>
+    <string name="sbjlist_title">Хичээлүүд</string>
     <string name="sbjlist_btn_back">Буцах</string>
     <string name="sbjlist_btn_add">Нэмэх</string>
     <string name="sbjlist_btn_schedule">Хуваарь</string>
@@ -77,7 +77,7 @@
     <string name="sbjlist_dialog_title1">Сонгосон хичээлийг бүртгэлээс хасах</string>
     <string name="sbjlist_message">Та итгэлтэй байна уу?</string>
 
-    <string name="mark_title">Дүнгийн бүртгэл</string>
+    <string name="mark_title">Дүн бүртгэл</string>
     <string name="mark_tv_ln">Овог</string>
     <string name="mark_tv_fn">Нэр</string>
     <string name="mark_tv_mark">Оноо</string>

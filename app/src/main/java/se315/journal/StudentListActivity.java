@@ -199,14 +199,6 @@ public class StudentListActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
-    public static int ordinalIndexOf(String str, String substr, int n)
-    {
-        int pos = str.indexOf(substr);
-        while (--n > 0 && pos != -1)
-            pos = str.indexOf(substr, pos + 1);
-        return pos;
-    }
 }
 
 

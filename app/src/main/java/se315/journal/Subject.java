@@ -6,7 +6,6 @@ public class Subject
 {
     int id;
     String name;
-    ArrayList<Item> items;
 
     public Subject()
     {

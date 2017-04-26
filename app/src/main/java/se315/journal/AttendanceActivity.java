@@ -66,11 +66,11 @@ public class AttendanceActivity extends AppCompatActivity
         if(dates.size() > 0)
             index = dates.size();
 
+        Collections.sort(dates);
+
         if(dates.get(index - 1).equals(formattedDate))
             disableButton(nextBtn);
 
-
-        Collections.sort(dates);
         loadAttendance(formattedDate);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
@@ -237,12 +237,13 @@ public class AttendanceActivity extends AppCompatActivity
 
             if(olderDate.equals(currentDate))
             {
-                //String oldDate = dates.get(index);
-                //int dayOfWeek = getDayOfWeek(oldDate);
-                //terms = dbHelper.getTerms(dayOfWeek);
-                //String day = getDayOfWeek(dayOfWeek);
-                //tvDate.setText(oldDate + "\n" + day);
-                //loadAttendance(oldDate);
+                index--;
+                String oldDate = dates.get(index);
+                int dayOfWeek = getDayOfWeek(oldDate);
+                terms = dbHelper.getTerms(dayOfWeek);
+                String day = getDayOfWeek(dayOfWeek);
+                tvDate.setText(oldDate + "\n" + day);
+                loadAttendance(oldDate);
                 enableButton(saveBtn);
                 disableButton(nextBtn);
                 enableButton(prevBtn);
@@ -256,8 +257,9 @@ public class AttendanceActivity extends AppCompatActivity
                 tvDate.setText(olderDate + "\n" + day);
                 loadAttendance(olderDate);
                 disableButton(saveBtn);
-                disableButton(prevBtn);
                 enableButton(nextBtn);
+                if(index == 0)
+                    disableButton(prevBtn);
                 disableRadioGroup();
             }
         }
