@@ -237,7 +237,7 @@ public class AttendanceActivity extends AppCompatActivity
 
             if(olderDate.equals(currentDate))
             {
-                index--;
+                //index--;
                 String oldDate = dates.get(index);
                 int dayOfWeek = getDayOfWeek(oldDate);
                 terms = dbHelper.getTerms(dayOfWeek);
@@ -291,10 +291,10 @@ public class AttendanceActivity extends AppCompatActivity
             String day = getDayOfWeek(dayOfWeek);
             tvDate.setText(newerDate + "\n" + day);
             loadAttendance(newerDate);
+            enableButton(prevBtn);
 
             if(newerDate.equals(currentDate))
             {
-                enableButton(prevBtn);
                 disableButton(nextBtn);
                 enableButton(saveBtn);
                 enableRadioGroup();
@@ -302,6 +302,8 @@ public class AttendanceActivity extends AppCompatActivity
         }
         else
         {
+            if(index < dates.size())
+                index++;
             terms = dbHelper.getTerms(day);
             String dayOfWeek = getDayOfWeek(day);
             tvDate.setText(currentDate + "\n" + dayOfWeek);
