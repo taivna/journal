@@ -14,11 +14,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +68,22 @@ public class AttendanceActivity extends AppCompatActivity
         if(dates.size() > 0)
             index = dates.size();
 
-        Collections.sort(dates);
+        Collections.sort(dates, new Comparator<String>()
+        {
+            DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+            @Override
+            public int compare(String o1, String o2)
+            {
+                try
+                {
+                    return f.parse(o1).compareTo(f.parse(o2));
+                }
+                catch (ParseException e)
+                {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
 
         if(dates.get(index - 1).equals(formattedDate))
             disableButton(nextBtn);
