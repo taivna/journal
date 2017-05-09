@@ -254,7 +254,7 @@ public class AttendanceActivity extends AppCompatActivity
 
             if(olderDate.equals(currentDate))
             {
-                //index--;
+                index--;
                 String oldDate = dates.get(index);
                 int dayOfWeek = getDayOfWeek(oldDate);
                 terms = dbHelper.getTerms(dayOfWeek);
