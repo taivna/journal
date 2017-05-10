@@ -261,10 +261,10 @@ public class AttendanceActivity extends AppCompatActivity
                 String day = getDayOfWeek(dayOfWeek);
                 tvDate.setText(oldDate + "\n" + day);
                 loadAttendance(oldDate);
-                enableButton(saveBtn);
+                disableButton(saveBtn);
                 disableButton(nextBtn);
                 enableButton(prevBtn);
-                enableRadioGroup();
+                disableRadioGroup();
             }
             else
             {
