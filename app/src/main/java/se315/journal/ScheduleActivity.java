@@ -1,14 +1,19 @@
 package se315.journal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +28,7 @@ public class ScheduleActivity extends AppCompatActivity
     Spinner subjectSpinner;
     Schedule schedule;
     GridLayout gridLayout;
+    ArrayList<String> stringArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,40 +42,15 @@ public class ScheduleActivity extends AppCompatActivity
         prepareEditTexts();
         dbHelper = new DBHelper(this);
         displaySchedule();
-        schedule = new Schedule();
-        schedule.scheduleArray = new String[6][5];
-
-        subjectSpinner = (Spinner) findViewById(R.id.sch_spinner);
+        schedule = dbHelper.getSchedule();
+        
         ArrayList<Subject> subjectArray = dbHelper.getAllSubjects();
-        ArrayList<String> stringArray = new ArrayList<>();
+        stringArray = new ArrayList<>();
 
         for(Subject subject: subjectArray)
         {
             stringArray.add(subject.getName());
         }
-
-        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(this, R.layout.my_spinner_item,
-                stringArray);
-
-        subjectAdapter.setDropDownViewResource(R.layout.my_spinner_dropdown_item);
-        subjectSpinner.setAdapter(subjectAdapter);
-        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                subjectName = subjectSpinner.getSelectedItem().toString();
-                EditText focusedView = (EditText) gridLayout.getFocusedChild();
-                focusedView.setText(subjectName.substring(0, 3));
-                int position = gridLayout.indexOfChild(focusedView);
-                int rowPosition = position/5;
-                int columnPosition = position%5;
-
-                schedule.scheduleArray[rowPosition][columnPosition] = subjectName;
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
     }
 
     public void saveSchedule(View view)
@@ -93,6 +74,54 @@ public class ScheduleActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    View.OnClickListener clickListener = new View.OnClickListener()
+    {
+        EditText clickedEt;
+
+        @Override
+        public void onClick(View view)
+        {
+            clickedEt = (EditText) view;
+            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ScheduleActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = inflater.inflate(R.layout.list_dialog, null);
+            alertDialog.setView(convertView);
+            alertDialog.setTitle("Хичээлүүд");
+
+            alertDialog.setNegativeButton("Хаах", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+
+            ListView lv = (ListView) convertView.findViewById(R.id.lv);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.my_spinner_dropdown_item,
+                    stringArray);
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+                {
+                    subjectName = stringArray.get(i);
+
+                    clickedEt.setText(subjectName.substring(0, 3));
+                    int position = gridLayout.indexOfChild(clickedEt);
+                    int rowPosition = position/5;
+                    int columnPosition = position%5;
+                    Toast.makeText(getApplicationContext(),
+                            (columnPosition + 1) + " дахь өдрийн " + (rowPosition + 1) + "-р цаг " + subjectName + " болж өөрчлөгдлөө",
+                            Toast.LENGTH_SHORT).show();
+                    schedule.scheduleArray[rowPosition][columnPosition] = subjectName;
+                }
+            });
+            alertDialog.show();
+        }
+    };
+
     public void displaySchedule()
     {
         if(!dbHelper.isTableEmpty("schedule"))
@@ -105,6 +134,8 @@ public class ScheduleActivity extends AppCompatActivity
                 {
                     editTexts[i][j].setText(sch.scheduleArray[i][j].substring(0, 3));
                     editTexts[i][j].setInputType(InputType.TYPE_NULL);
+                    editTexts[i][j].setFocusable(false);
+                    editTexts[i][j].setOnClickListener(clickListener);
                 }
             }
         }

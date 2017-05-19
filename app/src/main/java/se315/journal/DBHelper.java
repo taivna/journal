@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -923,5 +927,39 @@ public class DBHelper extends SQLiteOpenHelper
         cursor.close();
         db.close();
         return dates;
+    }
+
+    public void importStudentInfo(String fileName) throws IOException
+    {
+        FileReader file = new FileReader(fileName);
+        BufferedReader buffer = new BufferedReader(file);
+        SQLiteDatabase db = this.getWritableDatabase();
+        String line = "";
+        String columns = "register, name, surname, phone_number, email, address, enrolled_year, gender";
+        String str1 = "INSERT INTO " + STUDENT_TABLE + " (" + columns + ") values(";
+        String str2 = ");";
+
+        db.beginTransaction();
+
+        while((line = buffer.readLine()) != null)
+        {
+            StringBuilder sb = new StringBuilder(str1);
+            String[] str = line.split(",");
+            sb.append("'" + str[0] + "',");
+            sb.append("'" + str[1] + "',");
+            sb.append("'" + str[2] + "',");
+            sb.append("'" + str[3] + "',");
+            sb.append("'" + str[4] + "',");
+            sb.append("'" + str[5] + "',");
+            sb.append("'" + str[6] + "',");
+            sb.append("'" + str[7] + "'");
+            sb.append(str2);
+            db.execSQL(sb.toString());
+            db.close();
+        }
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 }

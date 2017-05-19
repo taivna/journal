@@ -5,15 +5,20 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,7 @@ public class StudentListActivity extends AppCompatActivity
 
         dbHelper = new DBHelper(this);
         studentList = dbHelper.getAllStudents();
+        //dbHelper.close();
 
         for(Student student: studentList)
         {
@@ -198,6 +204,35 @@ public class StudentListActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void importInfo(View view)
+    {
+        File mPath = new File(Environment.getExternalStorageDirectory() + "//DIR//");
+        FileDialog fileDialog = new FileDialog(this, mPath, ".csv");
+
+        fileDialog.addFileListener(new FileDialog.FileSelectedListener()
+        {
+            public void fileSelected(File file)
+            {
+                Log.d(getClass().getName(), "selected file " + file.toString());
+                try
+                {
+                    dbHelper.importStudentInfo(file.toString());
+                    dbHelper.close();
+                }
+                catch (Exception e)
+                {
+                }
+            }
+        });
+        //fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
+        //  public void directorySelected(File directory) {
+        //      Log.d(getClass().getName(), "selected dir " + directory.toString());
+        //  }
+        //});
+        //fileDialog.setSelectDirectoryOption(false);
+        fileDialog.showDialog();
     }
 }
 

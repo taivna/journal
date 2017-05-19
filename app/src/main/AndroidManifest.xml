@@ -4,15 +4,11 @@
 
     <application
         android:allowBackup="true"
-        android:backupAgent=".MyBackupAgent"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIpcmswZOU36ioASJHGjOAlM7rMr2WYQk2nGhH5w" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -38,7 +34,6 @@
         <activity android:name=".SubjectListActivity" />
         <activity android:name=".ScheduleActivity" />
         <activity android:name=".MarkActivity" />
-        <activity android:name=".BackupRestoreActivity" />
         <activity android:name=".GuardianInfoActivity"></activity>
     </application>
 

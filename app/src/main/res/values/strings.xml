@@ -12,7 +12,6 @@
     <string name="att_late">Х</string>
     <string name="att_sick">Ө</string>
 
-    <string name="main_btn_backup">Backup/Restore</string>
     <string name="main_btn_students">Сурагч бүртгэл</string>
     <string name="main_btn_subjects">Хичээлүүд</string>
     <string name="main_btn_scores">Дүн бүртгэл</string>
@@ -21,6 +20,7 @@
     <string name="stu_title">Сурагчид</string>
     <string name="stu_btn_back">Буцах</string>
     <string name="stu_btn_add">Нэмэх</string>
+    <string name="stu_btn_import">Импорт</string>
     <string name="stu_tv_ln">Овог</string>
     <string name="stu_tv_fn">Нэр</string>
     <string name="stu_dialog_title1">Сонгосон сурагчийг бүртгэлээс хасах</string>
