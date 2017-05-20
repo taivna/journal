@@ -287,6 +287,7 @@ public class DBHelper extends SQLiteOpenHelper
             while(!cursor.isAfterLast())
             {
                 Subject subject = new Subject();
+                subject.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 subject.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
                 subjectList.add(subject);
                 cursor.moveToNext();
@@ -786,6 +787,32 @@ public class DBHelper extends SQLiteOpenHelper
         cursor.close();
         db.close();
         return items;
+    }
+
+    public ArrayList<Mark> getSubjectMarks(Subject subject)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Mark> marks = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MARK_TABLE + " WHERE " + COLUMN_SUBJECT_ID + " =?", new String[]
+                {String.valueOf(subject.getId())});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Mark mark = new Mark();
+                mark.setStudentRegister(cursor.getString(cursor.getColumnIndex(COLUMN_STUDENT_REGISTER)));
+                mark.setSubjectId(cursor.getInt(cursor.getColumnIndex(COLUMN_SUBJECT_ID)));
+                mark.setItemId(cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_ID)));
+                mark.setMark(cursor.getInt(cursor.getColumnIndex(COLUMN_MARK)));
+                marks.add(mark);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return marks;
     }
 
     public Item getItem(int itemId)

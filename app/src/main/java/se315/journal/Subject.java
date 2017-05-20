@@ -8,9 +8,7 @@ public class Subject
     String name;
 
     public Subject()
-    {
-
-    }
+    {}
 
     public int getId()
     {

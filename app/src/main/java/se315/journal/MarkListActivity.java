@@ -129,4 +129,10 @@ public class MarkListActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void switchToMarkStats(View view)
+    {
+        Intent intent = new Intent(this, MarkStatsActivity.class);
+        startActivity(intent);
+    }
 }

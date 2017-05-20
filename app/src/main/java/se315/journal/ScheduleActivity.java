@@ -43,7 +43,7 @@ public class ScheduleActivity extends AppCompatActivity
         dbHelper = new DBHelper(this);
         displaySchedule();
         schedule = dbHelper.getSchedule();
-        
+
         ArrayList<Subject> subjectArray = dbHelper.getAllSubjects();
         stringArray = new ArrayList<>();
 

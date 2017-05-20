@@ -82,6 +82,7 @@
     <string name="mark_tv_fn">Нэр</string>
     <string name="mark_tv_mark">Оноо</string>
     <string name="mark_btn_back">Буцах</string>
+    <string name="mark_btn_stats">Статистик</string>
     <string name="mark_btn_save">Хадгалах</string>
     <string name="mark_dialog_title">Шалгалт/Даалгаварын оноог өөрчлөх</string>
     <string name="mark_dialog_message">Шинэ утга оруулна уу</string>
@@ -108,6 +109,9 @@
     <string name="gi_ok_btn">Баталгаажуулах</string>
     <string name="gi_cancel_btn">Болих</string>
     <string name="gi_back_btn">Буцах</string>
+
+    <string name="markstats_btn">Буцах</string>
+    <string name="markstats_title">Дүнгийн статистик</string>
 
     <string-array name="item_type_array">
         <item>Даалгавар</item>
