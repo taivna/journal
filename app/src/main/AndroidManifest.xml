@@ -34,7 +34,8 @@
         <activity android:name=".ScheduleActivity" />
         <activity android:name=".MarkActivity" />
         <activity android:name=".GuardianInfoActivity" />
-        <activity android:name=".MarkStatsActivity"></activity>
+        <activity android:name=".MarkStatsActivity" />
+        <activity android:name=".AttendanceStatsActivity"></activity>
     </application>
 
 </manifest>

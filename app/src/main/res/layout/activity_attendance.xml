@@ -34,6 +34,21 @@
         app:layout_constraintTop_toTopOf="parent"
         android:onClick="next"/>
 
+    <Button
+        android:id="@+id/att_btn_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/att_btn_stats"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/att_btn_back"
+        app:layout_constraintRight_toLeftOf="@+id/att_btn_save"
+        android:onClick="switchToAttendanceStats"/>
+
     <TextView
         android:id="@+id/att_tv_date"
         android:layout_width="wrap_content"

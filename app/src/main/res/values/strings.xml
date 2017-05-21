@@ -6,6 +6,7 @@
     <string name="att_tv_date">2017-3-27</string>
     <string name="att_btn_back">Буцах</string>
     <string name="att_btn_save">Хадгалах</string>
+    <string name="att_btn_stats">Статистик</string>
     <string name="att_title">Ирц бүртгэл</string>
     <string name="att_present">И</string>
     <string name="att_absent">Т</string>
@@ -113,8 +114,24 @@
     <string name="markstats_btn">Буцах</string>
     <string name="markstats_title">Дүнгийн статистик</string>
 
+    <string name="attstats_btn">Буцах</string>
+    <string name="attstats_tv_period">Цаг</string>
+    <string name="attstats_tv_subject">Хичээл</string>
+    <string name="attstats_tv_student">Сурагчийн овог, нэр</string>
+    <string name="attstats_title">Ирцийн статистик</string>
+
     <string-array name="item_type_array">
         <item>Даалгавар</item>
         <item>Шалгалт</item>
+    </string-array>
+
+    <string-array name="period_array">
+        <item>Хичээлийн цаг сонгоно уу</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 </resources>

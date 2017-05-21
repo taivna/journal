@@ -607,6 +607,216 @@ public class DBHelper extends SQLiteOpenHelper
         }
     }
 
+    public ArrayList<Attendance> getAllAttendance()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE, null);
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
+    public ArrayList<Attendance> getAttendance(int period)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE + " WHERE " + COLUMN_TERM + " =?",
+                new String[] {String.valueOf(period)});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
+    public ArrayList<Attendance> getAttendance(String subjectName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE + " WHERE " + COLUMN_SUBJECT_NAME + " =?",
+                new String[] {subjectName});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
+    public ArrayList<Attendance> getAttendance(String surName, String name, int period)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE + " WHERE " + COLUMN_SURNAME + " =? AND " +
+                        COLUMN_NAME + " =? AND " + COLUMN_TERM + " =?", new String[] {surName, name, String.valueOf(period)});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
+    public ArrayList<Attendance> getAttendance(String surName, String name, String subjectName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE + " WHERE " + COLUMN_SURNAME + " =? AND " +
+                COLUMN_NAME + " =? AND " + COLUMN_SUBJECT_NAME + " =?", new String[] {surName, name, subjectName});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
+    public ArrayList<Attendance> getAttendance(String surName, String name)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Attendance> attendanceList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ATTENDANCE_TABLE + " WHERE " + COLUMN_SURNAME + " =? AND "
+                + COLUMN_NAME + " =?", new String[] {surName, name});
+
+        if(cursor .moveToFirst())
+        {
+            while(!cursor.isAfterLast())
+            {
+                Attendance attendance = new Attendance();
+
+                attendance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
+                attendance.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                attendance.setSurName(cursor.getString(cursor.getColumnIndex(COLUMN_SURNAME)));
+                attendance.setState(cursor.getString(cursor.getColumnIndex(COLUMN_STATE)));
+                attendance.setTerm(cursor.getInt(cursor.getColumnIndex(COLUMN_TERM)));
+                attendance.setSubject(cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECT_NAME)));
+
+                attendanceList.add(attendance);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+            return attendanceList;
+        }
+        else
+        {
+            cursor.close();
+            db.close();
+            return null;
+        }
+    }
+
     public void addAttendance(Attendance attendance)
     {
         SQLiteDatabase db = this.getWritableDatabase();

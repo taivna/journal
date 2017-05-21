@@ -97,6 +97,8 @@ public class ScheduleActivity extends AppCompatActivity
                 }
             });
 
+            final AlertDialog dialog = alertDialog.show();
+
             ListView lv = (ListView) convertView.findViewById(R.id.lv);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.my_spinner_dropdown_item,
                     stringArray);
@@ -116,9 +118,9 @@ public class ScheduleActivity extends AppCompatActivity
                             (columnPosition + 1) + " дахь өдрийн " + (rowPosition + 1) + "-р цаг " + subjectName + " болж өөрчлөгдлөө",
                             Toast.LENGTH_SHORT).show();
                     schedule.scheduleArray[rowPosition][columnPosition] = subjectName;
+                    dialog.dismiss();
                 }
             });
-            alertDialog.show();
         }
     };
 

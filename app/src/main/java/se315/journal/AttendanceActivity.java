@@ -157,6 +157,12 @@ public class AttendanceActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void switchToAttendanceStats(View view)
+    {
+        Intent intent = new Intent(this, AttendanceStatsActivity.class);
+        startActivity(intent);
+    }
+
     public void saveAttendance(View view)
     {
         boolean updated = true;

@@ -11,11 +11,6 @@ import java.util.List;
 
 public class ListAdapter extends ArrayAdapter
 {
-    public ListAdapter(Context context, int resource)
-    {
-        super(context, resource);
-    }
-
     public ListAdapter(Context context, int resource, List<Item> items)
     {
         super(context, resource, items);
